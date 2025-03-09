@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
-import { Calendar, Clock, Users, CheckCircle } from 'lucide-react';
+import { Calendar, Clock, Users, CheckCircle, Google, Mail, CalendarDays } from 'lucide-react';
 import GradientButton from './GradientButton';
 import { cn } from '@/lib/utils';
+import { toast } from '@/hooks/use-toast';
 
 const meetingTimes = [
   { id: 1, time: '9:00 AM', available: true },
@@ -12,26 +13,62 @@ const meetingTimes = [
   { id: 5, time: '5:00 PM', available: false },
 ];
 
+// Current month dates for the calendar
+const getCurrentMonthDays = () => {
+  const days = [];
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentDay = now.getDate();
+  
+  // Get current day of week (0-6, 0 is Sunday)
+  const dayOfWeek = now.getDay();
+  
+  // Calculate the Monday of this week
+  const monday = new Date(now);
+  monday.setDate(currentDay - dayOfWeek + (dayOfWeek === 0 ? -6 : 1));
+  
+  // Generate 7 days starting from Monday
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(monday);
+    date.setDate(monday.getDate() + i);
+    
+    // Weekend check
+    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+    
+    days.push({
+      day: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][date.getDay() === 0 ? 6 : date.getDay() - 1],
+      date: date.getDate().toString(),
+      status: isWeekend ? 'unavailable' : 'available'
+    });
+  }
+  
+  return days;
+};
+
 const ScheduleDemo = () => {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [selectedTime, setSelectedTime] = useState<number | null>(null);
   const [isBooked, setIsBooked] = useState(false);
+  const [calendarProvider, setCalendarProvider] = useState<string | null>(null);
+  const [isCalendarConnected, setIsCalendarConnected] = useState(false);
   
-  const days = [
-    { day: 'Mon', date: '24', status: 'available' },
-    { day: 'Tue', date: '25', status: 'available' },
-    { day: 'Wed', date: '26', status: 'available' },
-    { day: 'Thu', date: '27', status: 'available' },
-    { day: 'Fri', date: '28', status: 'available' },
-    { day: 'Sat', date: '29', status: 'unavailable' },
-    { day: 'Sun', date: '30', status: 'unavailable' },
-  ];
+  const days = getCurrentMonthDays();
+
+  const handleCalendarConnect = (provider: string) => {
+    // Simulate OAuth flow
+    setCalendarProvider(provider);
+    setIsCalendarConnected(true);
+    toast({
+      title: "Calendar Connected",
+      description: `Successfully connected to ${provider} calendar.`,
+    });
+  };
 
   const handleBookMeeting = () => {
     if (selectedDay !== null && selectedTime !== null) {
       setIsBooked(true);
-      // In a real app, you would make an API call here
-      console.log(`Booked: Day ${selectedDay}, Time ${selectedTime}`);
+      // In a real app, you would make an API call here to save the meeting
+      console.log(`Booked: Day ${selectedDay}, Time ${selectedTime}, Calendar: ${calendarProvider || 'None'}`);
     }
   };
 
@@ -46,9 +83,18 @@ const ScheduleDemo = () => {
         <h3 className="text-2xl font-semibold mb-2">Your Demo is Scheduled!</h3>
         <p className="text-muted-foreground mb-6">
           We've sent a confirmation to your email with all the details.
+          {calendarProvider && (
+            <span className="block mt-2">
+              The meeting has been added to your {calendarProvider} calendar.
+            </span>
+          )}
         </p>
         <GradientButton
-          onClick={() => setIsBooked(false)}
+          onClick={() => {
+            setIsBooked(false);
+            setSelectedDay(null);
+            setSelectedTime(null);
+          }}
           variant="outline"
         >
           Schedule Another Demo
@@ -60,6 +106,50 @@ const ScheduleDemo = () => {
   return (
     <div className="premium-card p-6 max-w-md mx-auto">
       <h3 className="text-xl font-semibold mb-4">Schedule a Demo</h3>
+      
+      {!isCalendarConnected && (
+        <div className="mb-6">
+          <div className="flex items-center mb-3">
+            <CalendarDays className="w-5 h-5 text-meetease-blue mr-2" />
+            <h4 className="font-medium">Connect your calendar</h4>
+          </div>
+          <p className="text-muted-foreground text-sm mb-3">
+            Connect your calendar to see availability and automatically add the meeting.
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => handleCalendarConnect('Google')}
+              className="flex items-center justify-center gap-2 p-2 border rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <Google className="w-5 h-5 text-red-500" />
+              <span>Google Calendar</span>
+            </button>
+            <button
+              onClick={() => handleCalendarConnect('Outlook')}
+              className="flex items-center justify-center gap-2 p-2 border rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <Mail className="w-5 h-5 text-blue-500" />
+              <span>Outlook</span>
+            </button>
+          </div>
+        </div>
+      )}
+      
+      {isCalendarConnected && (
+        <div className="mb-4 p-2 bg-meetease-blue/10 rounded-lg flex items-center">
+          <CalendarDays className="w-5 h-5 text-meetease-blue mr-2" />
+          <span className="text-sm">
+            Connected to {calendarProvider} Calendar
+          </span>
+          <button
+            onClick={() => setIsCalendarConnected(false)}
+            className="ml-auto text-xs text-meetease-blue hover:underline"
+          >
+            Change
+          </button>
+        </div>
+      )}
+      
       <div className="mb-6">
         <div className="flex items-center mb-3">
           <Calendar className="w-5 h-5 text-meetease-blue mr-2" />
