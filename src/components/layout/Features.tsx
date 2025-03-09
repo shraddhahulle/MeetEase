@@ -11,7 +11,7 @@ const Features = () => {
   const features = [
     {
       title: 'AI-Powered Scheduling',
-      description: 'Smart algorithm suggests optimal meeting times based on everyone's availability.',
+      description: 'Smart algorithm suggests optimal meeting times based on everyone\'s availability.',
       icon: Bot,
       iconColor: 'text-meetease-blue'
     },
