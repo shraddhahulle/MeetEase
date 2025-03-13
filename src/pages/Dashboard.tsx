@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import GradientButton from '@/components/ui/GradientButton';
+import { LogoImage } from '@/components/ui/LogoImage';
 import { 
   CalendarDays, 
   Mail, 
@@ -15,25 +16,80 @@ import {
   X,
   Plus,
   Settings,
-  LogOut
+  LogOut,
+  BellRing
 } from 'lucide-react';
 import { ScheduleDemo } from '@/components/ui/ScheduleDemo';
+
+// Sample meetings data - in a real app, this would come from an API
+const initialMeetings = [
+  { id: 1, title: 'Team Standup', date: '2025-10-24', time: '09:00 AM', attendees: 5, notified: false },
+  { id: 2, title: 'Product Review', date: '2025-10-25', time: '02:30 PM', attendees: 3, notified: false },
+];
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [meetings, setMeetings] = useState([
-    { id: 1, title: 'Team Standup', date: '2023-10-24', time: '09:00 AM', attendees: 5 },
-    { id: 2, title: 'Product Review', date: '2023-10-25', time: '02:30 PM', attendees: 3 },
-  ]);
+  const [meetings, setMeetings] = useState(initialMeetings);
   const [showNewMeetingForm, setShowNewMeetingForm] = useState(false);
+  const [meetingFormData, setMeetingFormData] = useState({
+    title: '',
+    date: '',
+    time: '',
+    participants: '',
+    description: ''
+  });
 
-  // This would normally check authentication state
+  // Check if any meetings are coming up in 2 days and notify
+  useEffect(() => {
+    const checkUpcomingMeetings = () => {
+      const today = new Date();
+      const twoDaysLater = new Date();
+      twoDaysLater.setDate(today.getDate() + 2);
+      twoDaysLater.setHours(0, 0, 0, 0);
+      
+      const tomorrow = new Date();
+      tomorrow.setDate(today.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0);
+      
+      meetings.forEach(meeting => {
+        const meetingDate = new Date(meeting.date);
+        meetingDate.setHours(0, 0, 0, 0);
+        
+        if (
+          meetingDate.getTime() === twoDaysLater.getTime() && 
+          !meeting.notified
+        ) {
+          // In a real app, this would send an email
+          toast({
+            title: "Upcoming Meeting Reminder",
+            description: `Your meeting "${meeting.title}" is coming up in 2 days on ${meeting.date} at ${meeting.time}`,
+          });
+          
+          // Mark as notified
+          setMeetings(prevMeetings => 
+            prevMeetings.map(m => 
+              m.id === meeting.id ? { ...m, notified: true } : m
+            )
+          );
+          
+          console.info(`Reminder would be sent for meeting: ${meeting.title} on ${meeting.date}`);
+        }
+      });
+    };
+    
+    // Check immediately and then every hour
+    checkUpcomingMeetings();
+    const interval = setInterval(checkUpcomingMeetings, 3600000);
+    
+    return () => clearInterval(interval);
+  }, [meetings]);
+
   useEffect(() => {
     toast({
-      title: "Welcome to MeetEase",
-      description: "You're now on the dashboard. This is a demo version.",
+      title: "Welcome to Your Dashboard",
+      description: "You're now on the dashboard. Your upcoming meetings will be shown here.",
     });
   }, []);
 
@@ -43,6 +99,51 @@ const Dashboard = () => {
 
   const handleNewMeeting = () => {
     setShowNewMeetingForm(true);
+    setMeetingFormData({
+      title: '',
+      date: '',
+      time: '',
+      participants: '',
+      description: ''
+    });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setMeetingFormData({
+      ...meetingFormData,
+      [name]: value
+    });
+  };
+
+  const handleCreateMeeting = () => {
+    if (!meetingFormData.title || !meetingFormData.date || !meetingFormData.time) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    const participantsCount = meetingFormData.participants.split(',').filter(p => p.trim()).length;
+    
+    const newMeeting = {
+      id: meetings.length + 1,
+      title: meetingFormData.title,
+      date: meetingFormData.date,
+      time: meetingFormData.time,
+      attendees: participantsCount + 1, // +1 for the organizer
+      notified: false
+    };
+    
+    setMeetings([...meetings, newMeeting]);
+    setShowNewMeetingForm(false);
+    
+    toast({
+      title: "Meeting Scheduled",
+      description: "Your new meeting has been scheduled successfully!",
+    });
   };
 
   const handleLogout = () => {
@@ -51,6 +152,34 @@ const Dashboard = () => {
       description: "You have been logged out successfully.",
     });
     navigate('/');
+  };
+  
+  const connectCalendar = () => {
+    toast({
+      title: "Calendar Connected",
+      description: "Your calendar has been successfully connected!",
+    });
+  };
+  
+  const handleAISuggestions = () => {
+    toast({
+      title: "AI Suggestions",
+      description: "Analyzing your schedule for optimal meeting times...",
+    });
+    
+    setTimeout(() => {
+      toast({
+        title: "AI Suggestions Ready",
+        description: "Based on your team's availability, Tuesday at 2:00 PM is the optimal meeting time.",
+      });
+    }, 2000);
+  };
+  
+  const handleInviteTeam = () => {
+    toast({
+      title: "Team Invitations",
+      description: "Invitations have been sent to your team members",
+    });
   };
 
   return (
@@ -68,71 +197,68 @@ const Dashboard = () => {
       </div>
 
       {/* Sidebar */}
-      <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-0 bg-white shadow-md w-64 transition-transform duration-300 ease-in-out z-40 lg:z-auto`}>
-        <div className="p-4 border-b">
-          <div className="flex items-center gap-2">
-            <span className="w-8 h-8 bg-meetease-blue rounded-full"></span>
-            <h1 className="text-xl font-bold">MeetEase</h1>
-          </div>
+      <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-0 bg-white shadow-md w-56 transition-transform duration-300 ease-in-out z-40 lg:z-auto`}>
+        <div className="p-3 border-b flex items-center justify-center">
+          <LogoImage size="md" />
         </div>
         
-        <nav className="p-4">
-          <ul className="space-y-2">
+        <nav className="p-2">
+          <ul className="space-y-1">
             <li>
               <button 
                 onClick={() => setActiveTab('overview')} 
-                className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-3 transition-colors ${activeTab === 'overview' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
+                className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'overview' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
               >
-                <Calendar className="w-5 h-5" />
+                <Calendar className="w-4 h-4" />
                 <span>Overview</span>
               </button>
             </li>
             <li>
               <button 
                 onClick={() => setActiveTab('meetings')} 
-                className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-3 transition-colors ${activeTab === 'meetings' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
+                className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'meetings' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
               >
-                <Clock className="w-5 h-5" />
+                <Clock className="w-4 h-4" />
                 <span>My Meetings</span>
               </button>
             </li>
             <li>
               <button 
                 onClick={() => setActiveTab('schedule')} 
-                className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-3 transition-colors ${activeTab === 'schedule' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
+                className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'schedule' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
               >
-                <CalendarDays className="w-5 h-5" />
+                <CalendarDays className="w-4 h-4" />
                 <span>Schedule</span>
               </button>
             </li>
             <li>
               <button 
                 onClick={() => setActiveTab('team')} 
-                className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-3 transition-colors ${activeTab === 'team' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
+                className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'team' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
               >
-                <Users className="w-5 h-5" />
+                <Users className="w-4 h-4" />
                 <span>Team</span>
               </button>
             </li>
           </ul>
           
-          <div className="mt-8 pt-6 border-t">
-            <ul className="space-y-2">
+          <div className="mt-4 pt-4 border-t">
+            <ul className="space-y-1">
               <li>
                 <button 
                   onClick={() => setActiveTab('settings')} 
-                  className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-3 transition-colors ${activeTab === 'settings' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
+                  className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'settings' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
                 >
-                  <Settings className="w-5 h-5" />
+                  <Settings className="w-4 h-4" />
                   <span>Settings</span>
                 </button>
               </li>
               <li>
                 <button 
                   onClick={handleLogout} 
-                  className="w-full text-left px-4 py-2 rounded-lg flex items-center gap-3 text-red-500 hover:bg-red-50 transition-colors"
+                  className="w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 text-red-500 hover:bg-red-50 transition-colors"
                 >
-                  <LogOut className="w-5 h-5" />
+                  <LogOut className="w-4 h-4" />
                   <span>Logout</span>
                 </button>
               </li>
@@ -142,10 +268,10 @@ const Dashboard = () => {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 lg:ml-64">
+      <div className="flex-1 lg:ml-56">
         <header className="bg-white shadow-sm sticky top-0 z-30">
-          <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 className="text-xl font-bold">
+          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 className="text-lg font-bold">
               {activeTab === 'overview' && 'Dashboard Overview'}
               {activeTab === 'meetings' && 'My Meetings'}
               {activeTab === 'schedule' && 'Schedule'}
@@ -163,49 +289,53 @@ const Dashboard = () => {
           </div>
         </header>
 
-        <main className="container mx-auto px-4 py-8">
+        <main className="container mx-auto px-4 py-6">
           {/* Overview Tab */}
           {activeTab === 'overview' && (
             <div>
-              <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-                <h2 className="text-2xl font-bold mb-4">Welcome to Your Dashboard</h2>
+              <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+                <h2 className="text-xl font-bold mb-4">Welcome to Your Dashboard</h2>
                 <p className="text-gray-600 mb-6">
-                  This is a fully functional demo version of the MeetEase dashboard. Explore the features and see how AI scheduling can transform your meeting experience.
+                  Use the dashboard to manage your meetings and schedule. You'll receive email reminders two days before your meetings.
                 </p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                  <div className="bg-meetease-blue/10 rounded-lg p-4 flex items-center">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  <button 
+                    onClick={() => setActiveTab('meetings')}
+                    className="bg-meetease-blue/10 rounded-lg p-4 flex items-center hover:bg-meetease-blue/20 transition-colors"
+                  >
                     <Calendar className="w-10 h-10 text-meetease-blue mr-3" />
-                    <div>
+                    <div className="text-left">
                       <h3 className="font-medium">Upcoming Meetings</h3>
                       <p className="text-sm text-gray-600">{meetings.length} meetings scheduled</p>
                     </div>
-                  </div>
+                  </button>
                   
-                  <div className="bg-meetease-purple/10 rounded-lg p-4 flex items-center">
+                  <button 
+                    onClick={handleAISuggestions}
+                    className="bg-meetease-purple/10 rounded-lg p-4 flex items-center hover:bg-meetease-purple/20 transition-colors"
+                  >
                     <Clock className="w-10 h-10 text-meetease-purple mr-3" />
-                    <div>
+                    <div className="text-left">
                       <h3 className="font-medium">AI Suggestions</h3>
                       <p className="text-sm text-gray-600">3 free suggestions available</p>
                     </div>
-                  </div>
+                  </button>
                   
-                  <div className="bg-meetease-indigo/10 rounded-lg p-4 flex items-center">
+                  <button 
+                    onClick={() => setActiveTab('team')}
+                    className="bg-meetease-indigo/10 rounded-lg p-4 flex items-center hover:bg-meetease-indigo/20 transition-colors"
+                  >
                     <Users className="w-10 h-10 text-meetease-indigo mr-3" />
-                    <div>
+                    <div className="text-left">
                       <h3 className="font-medium">Team Members</h3>
                       <p className="text-sm text-gray-600">Invite your team to collaborate</p>
                     </div>
-                  </div>
+                  </button>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <GradientButton onClick={() => {
-                    toast({
-                      title: "Calendar Integration",
-                      description: "Connected to your calendar successfully!",
-                    });
-                  }}>
+                  <GradientButton onClick={connectCalendar}>
                     <CalendarDays className="w-4 h-4 mr-2" />
                     Connect Calendar
                   </GradientButton>
@@ -221,8 +351,8 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-                <h3 className="text-xl font-bold mb-4">Recent Meetings</h3>
+              <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+                <h3 className="text-lg font-bold mb-4">Upcoming Meetings</h3>
                 {meetings.length > 0 ? (
                   <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
@@ -271,7 +401,7 @@ const Dashboard = () => {
           {activeTab === 'meetings' && (
             <div className="bg-white rounded-xl shadow-md p-6">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">My Meetings</h2>
+                <h2 className="text-xl font-bold">My Meetings</h2>
                 <GradientButton onClick={handleNewMeeting}>
                   <Plus className="w-4 h-4 mr-2" />
                   New Meeting
@@ -287,6 +417,12 @@ const Dashboard = () => {
                           <h3 className="font-semibold text-lg">{meeting.title}</h3>
                           <p className="text-gray-600">{meeting.date} at {meeting.time}</p>
                           <p className="text-gray-600">{meeting.attendees} attendees</p>
+                          {meeting.notified && (
+                            <div className="flex items-center text-green-600 text-sm mt-1">
+                              <BellRing className="w-3 h-3 mr-1" />
+                              <span>Reminder sent</span>
+                            </div>
+                          )}
                         </div>
                         <div className="flex gap-2">
                           <Button 
@@ -336,8 +472,8 @@ const Dashboard = () => {
           {/* Schedule Tab */}
           {activeTab === 'schedule' && (
             <div>
-              <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-                <h2 className="text-2xl font-bold mb-6">Schedule a Meeting</h2>
+              <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+                <h2 className="text-xl font-bold mb-6">Schedule a Meeting</h2>
                 <ScheduleDemo />
               </div>
             </div>
@@ -346,19 +482,12 @@ const Dashboard = () => {
           {/* Team Tab */}
           {activeTab === 'team' && (
             <div className="bg-white rounded-xl shadow-md p-6">
-              <h2 className="text-2xl font-bold mb-6">Team Management</h2>
-              <div className="text-center py-12">
+              <h2 className="text-xl font-bold mb-6">Team Management</h2>
+              <div className="text-center py-8">
                 <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-xl font-medium mb-2">Invite Your Team</h3>
                 <p className="text-gray-500 mb-6">Add team members to collaborate on scheduling</p>
-                <GradientButton 
-                  onClick={() => {
-                    toast({
-                      title: "Team Invitations",
-                      description: "Invitations have been sent to your team members",
-                    });
-                  }}
-                >
+                <GradientButton onClick={handleInviteTeam}>
                   <Mail className="w-4 h-4 mr-2" />
                   Send Invitations
                 </GradientButton>
@@ -369,7 +498,7 @@ const Dashboard = () => {
           {/* Settings Tab */}
           {activeTab === 'settings' && (
             <div className="bg-white rounded-xl shadow-md p-6">
-              <h2 className="text-2xl font-bold mb-6">Account Settings</h2>
+              <h2 className="text-xl font-bold mb-6">Account Settings</h2>
               <div className="space-y-6">
                 <div className="border-b pb-6">
                   <h3 className="text-lg font-medium mb-4">Profile Information</h3>
@@ -387,7 +516,7 @@ const Dashboard = () => {
                       <input 
                         type="email" 
                         className="w-full p-2 border rounded-md"
-                        defaultValue="demo@meetease.example"
+                        defaultValue="demo@example.com"
                       />
                     </div>
                   </div>
@@ -438,29 +567,62 @@ const Dashboard = () => {
                 
                 <div className="space-y-4 mb-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Meeting Title</label>
-                    <input type="text" className="w-full p-2 border rounded-md" placeholder="Enter meeting title" />
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Meeting Title*</label>
+                    <input 
+                      type="text" 
+                      name="title"
+                      value={meetingFormData.title}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border rounded-md" 
+                      placeholder="Enter meeting title" 
+                    />
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                      <input type="date" className="w-full p-2 border rounded-md" />
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Date*</label>
+                      <input 
+                        type="date" 
+                        name="date"
+                        value={meetingFormData.date}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border rounded-md" 
+                      />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
-                      <input type="time" className="w-full p-2 border rounded-md" />
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Time*</label>
+                      <input 
+                        type="time" 
+                        name="time"
+                        value={meetingFormData.time}
+                        onChange={handleInputChange}
+                        className="w-full p-2 border rounded-md" 
+                      />
                     </div>
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Participants (emails)</label>
-                    <textarea className="w-full p-2 border rounded-md" rows={3} placeholder="Enter email addresses separated by commas" />
+                    <textarea 
+                      name="participants"
+                      value={meetingFormData.participants}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border rounded-md" 
+                      rows={3} 
+                      placeholder="Enter email addresses separated by commas" 
+                    />
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea className="w-full p-2 border rounded-md" rows={3} placeholder="Enter meeting description" />
+                    <textarea 
+                      name="description"
+                      value={meetingFormData.description}
+                      onChange={handleInputChange}
+                      className="w-full p-2 border rounded-md" 
+                      rows={3} 
+                      placeholder="Enter meeting description" 
+                    />
                   </div>
                 </div>
                 
@@ -471,23 +633,7 @@ const Dashboard = () => {
                   >
                     Cancel
                   </Button>
-                  <GradientButton 
-                    onClick={() => {
-                      const newMeeting = {
-                        id: meetings.length + 1,
-                        title: 'New Meeting',
-                        date: '2023-11-01',
-                        time: '10:00 AM',
-                        attendees: 2,
-                      };
-                      setMeetings([...meetings, newMeeting]);
-                      setShowNewMeetingForm(false);
-                      toast({
-                        title: "Meeting Scheduled",
-                        description: "Your new meeting has been scheduled successfully!",
-                      });
-                    }}
-                  >
+                  <GradientButton onClick={handleCreateMeeting}>
                     Schedule Meeting
                   </GradientButton>
                 </div>

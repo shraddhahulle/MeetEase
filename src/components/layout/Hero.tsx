@@ -4,6 +4,7 @@ import GradientButton from '../ui/GradientButton';
 import { ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
+import { LogoImage } from '../ui/LogoImage';
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -52,7 +53,6 @@ const Hero = () => {
       description: "Setting up your account...",
     });
     
-    // In a real app, this would create an account or navigate to sign-up
     setTimeout(() => {
       navigate('/dashboard');
     }, 1500);
@@ -61,11 +61,9 @@ const Hero = () => {
   const handleWatchDemo = () => {
     setIsWatchingDemo(true);
     
-    // In a real app, this would play a demo video
-    // For now, let's navigate to a demo section or show a toast
     toast({
       title: "Demo Mode",
-      description: "Welcome to the MeetEase demo!",
+      description: "Welcome to the demo!",
     });
     
     // Smoothly scroll to the demo section
@@ -85,11 +83,8 @@ const Hero = () => {
       
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center text-center">
-          <div className="inline-block animate-fade-in">
-            <span className="inline-flex items-center px-3 py-1 rounded-full bg-meetease-blue/10 text-meetease-blue text-sm font-medium mb-6">
-              <span className="w-2 h-2 rounded-full bg-meetease-blue mr-2"></span>
-              AI-Powered Scheduling
-            </span>
+          <div className="inline-block animate-fade-in mb-8">
+            <LogoImage size="lg" />
           </div>
           
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 animate-fade-in [animation-delay:200ms] max-w-4xl">
@@ -98,7 +93,7 @@ const Hero = () => {
           </h1>
           
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-8 animate-fade-in [animation-delay:400ms]">
-            MeetEase uses artificial intelligence to find the perfect meeting time for everyone, 
+            Use artificial intelligence to find the perfect meeting time for everyone, 
             eliminating scheduling headaches and boosting productivity.
           </p>
           
@@ -118,8 +113,9 @@ const Hero = () => {
               {isWatchingDemo ? (
                 <div className="aspect-video bg-gray-100 rounded-t-2xl shadow-xl flex items-center justify-center">
                   <div className="text-center p-8">
-                    <h3 className="text-xl font-semibold mb-4">MeetEase Demo</h3>
-                    <p className="mb-6">Experience how MeetEase can transform your scheduling workflow.</p>
+                    <LogoImage size="lg" className="mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold mb-4">Demo Experience</h3>
+                    <p className="mb-6">Experience how our AI can transform your scheduling workflow.</p>
                     <div className="flex justify-center">
                       <GradientButton onClick={() => {
                         toast({
@@ -139,7 +135,7 @@ const Hero = () => {
               ) : (
                 <img 
                   src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1024&q=80" 
-                  alt="MeetEase Dashboard" 
+                  alt="Dashboard" 
                   className="w-full h-auto object-cover rounded-t-2xl shadow-xl"
                 />
               )}

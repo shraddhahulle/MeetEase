@@ -33,7 +33,6 @@ const Navbar = () => {
       title: "Sign In",
       description: "Sign in functionality will be available soon!",
     });
-    // In a real app, this would navigate to the sign in page or open a modal
     navigate('/dashboard');
   };
 
@@ -42,7 +41,6 @@ const Navbar = () => {
       title: "Getting Started",
       description: "Creating your account...",
     });
-    // Simulate account creation process
     setTimeout(() => {
       navigate('/dashboard');
     }, 1500);
@@ -57,9 +55,8 @@ const Navbar = () => {
     >
       <div className="container mx-auto">
         <div className="flex items-center justify-between">
-          <a href="#" className="flex items-center space-x-2 no-highlight">
+          <a href="/" className="flex items-center no-highlight">
             <AnimatedLogo />
-            <span className="font-semibold text-xl">MeetEase</span>
           </a>
           
           <nav className="hidden md:flex items-center space-x-8">

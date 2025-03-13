@@ -46,24 +46,15 @@ const AnimatedLogo = ({ className, size = 'md' }: AnimatedLogoProps) => {
       <div 
         ref={logoRef} 
         className={cn(
-          'flex items-center justify-center bg-gradient-to-r from-meetease-blue to-meetease-cyan rounded-xl',
+          'flex items-center justify-center',
           sizes[size]
         )}
       >
-        <svg 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          xmlns="http://www.w3.org/2000/svg" 
-          className="w-2/3 h-2/3 text-white"
-        >
-          <path 
-            d="M6 9.5V8C6 4.686 8.686 2 12 2C15.314 2 18 4.686 18 8V9.5M7 10.5V18.5M17 10.5V18.5M3 10.5H21V20C21 21.105 20.105 22 19 22H5C3.895 22 3 21.105 3 20V10.5Z" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          />
-        </svg>
+        <img 
+          src="/lovable-uploads/48aa5307-88d4-49d5-8ad7-814902452bb7.png" 
+          alt="Logo" 
+          className="w-full h-full object-contain"
+        />
       </div>
     </div>
   );
