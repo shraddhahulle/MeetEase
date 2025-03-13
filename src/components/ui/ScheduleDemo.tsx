@@ -48,7 +48,7 @@ const getCurrentMonthDays = () => {
   return days;
 };
 
-const ScheduleDemo = () => {
+export const ScheduleDemo = () => {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [selectedTime, setSelectedTime] = useState<number | null>(null);
   const [isBooked, setIsBooked] = useState(false);
@@ -87,6 +87,26 @@ const ScheduleDemo = () => {
       return;
     }
 
+    if (!email.trim() || !name.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter your name and email address.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Simple email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid email address.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     
     // Simulate API delay
@@ -101,7 +121,7 @@ const ScheduleDemo = () => {
       
       toast({
         title: "Success!",
-        description: "Your demo has been scheduled successfully!",
+        description: "Your meeting has been scheduled successfully!",
       });
     }, 2000);
   };
@@ -128,14 +148,8 @@ const ScheduleDemo = () => {
       description: "Welcome to MeetEase! Your 14-day free trial has begun.",
     });
     
-    // Redirect to dashboard (in a real app)
-    // For now, we'll just simulate this with a toast
-    setTimeout(() => {
-      toast({
-        title: "Redirecting...",
-        description: "Taking you to your new dashboard.",
-      });
-    }, 1500);
+    // Navigate to dashboard
+    navigate('/dashboard');
   };
 
   if (isBooked) {
@@ -143,10 +157,10 @@ const ScheduleDemo = () => {
       <div className="premium-card p-8 text-center max-w-md mx-auto">
         <div className="flex justify-center mb-6">
           <div className="rounded-full bg-meetease-green/10 p-4">
-            <CheckCircle className="w-12 h-12 text-meetease-green" />
+            <CheckCircle className="w-12 h-12 text-green-500" />
           </div>
         </div>
-        <h3 className="text-2xl font-semibold mb-2">Your Demo is Scheduled!</h3>
+        <h3 className="text-2xl font-semibold mb-2">Your Meeting is Scheduled!</h3>
         <p className="text-muted-foreground mb-6">
           We've sent a confirmation to {email} with all the details.
           {calendarProvider && (
@@ -161,7 +175,7 @@ const ScheduleDemo = () => {
             variant="outline"
             className="w-full"
           >
-            Schedule Another Demo
+            Schedule Another Meeting
           </GradientButton>
           
           <GradientButton
@@ -177,7 +191,7 @@ const ScheduleDemo = () => {
 
   return (
     <div className="premium-card p-6 max-w-md mx-auto">
-      <h3 className="text-xl font-semibold mb-4">Schedule a Demo</h3>
+      <h3 className="text-xl font-semibold mb-4">Schedule a Meeting</h3>
       
       {!isCalendarConnected && (
         <div className="mb-6">
@@ -316,11 +330,10 @@ const ScheduleDemo = () => {
         onClick={handleBookMeeting}
         disabled={selectedDay === null || selectedTime === null || !email || !name || isSubmitting}
         className="w-full"
+        isLoading={isSubmitting}
       >
-        {isSubmitting ? 'Booking...' : 'Book My Demo'}
+        {isSubmitting ? 'Booking...' : 'Book My Meeting'}
       </GradientButton>
     </div>
   );
 };
-
-export default ScheduleDemo;
