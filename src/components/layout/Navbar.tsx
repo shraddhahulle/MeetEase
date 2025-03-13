@@ -4,10 +4,13 @@ import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AnimatedLogo from '../ui/AnimatedLogo';
 import GradientButton from '../ui/GradientButton';
+import { useNavigate } from 'react-router-dom';
+import { toast } from '@/hooks/use-toast';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
   
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +27,26 @@ const Navbar = () => {
     { name: 'Pricing', href: '#pricing' },
     { name: 'FAQ', href: '#faq' },
   ];
+
+  const handleSignIn = () => {
+    toast({
+      title: "Sign In",
+      description: "Sign in functionality will be available soon!",
+    });
+    // In a real app, this would navigate to the sign in page or open a modal
+    navigate('/dashboard');
+  };
+
+  const handleGetStarted = () => {
+    toast({
+      title: "Getting Started",
+      description: "Creating your account...",
+    });
+    // Simulate account creation process
+    setTimeout(() => {
+      navigate('/dashboard');
+    }, 1500);
+  };
 
   return (
     <header
@@ -52,10 +75,13 @@ const Navbar = () => {
           </nav>
           
           <div className="hidden md:flex items-center space-x-4">
-            <a href="#" className="font-medium text-meetease-blue hover:text-meetease-blue/80 transition-colors">
+            <button 
+              onClick={handleSignIn}
+              className="font-medium text-meetease-blue hover:text-meetease-blue/80 transition-colors"
+            >
               Sign In
-            </a>
-            <GradientButton size="sm">Get Started</GradientButton>
+            </button>
+            <GradientButton size="sm" onClick={handleGetStarted}>Get Started</GradientButton>
           </div>
           
           <button 
@@ -87,11 +113,23 @@ const Navbar = () => {
                 </a>
               ))}
               <div className="pt-4 border-t">
-                <a href="#" className="block py-2 font-medium text-meetease-blue">
+                <button 
+                  onClick={() => {
+                    handleSignIn();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="block py-2 font-medium text-meetease-blue"
+                >
                   Sign In
-                </a>
+                </button>
                 <div className="mt-3">
-                  <GradientButton className="w-full">
+                  <GradientButton 
+                    className="w-full"
+                    onClick={() => {
+                      handleGetStarted();
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
                     Get Started
                   </GradientButton>
                 </div>

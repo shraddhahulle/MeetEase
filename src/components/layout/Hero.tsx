@@ -1,10 +1,14 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import GradientButton from '../ui/GradientButton';
 import { ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from '@/hooks/use-toast';
 
 const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const [isWatchingDemo, setIsWatchingDemo] = useState(false);
   
   useEffect(() => {
     if (!heroRef.current) return;
@@ -42,6 +46,35 @@ const Hero = () => {
     };
   }, []);
 
+  const handleGetStarted = () => {
+    toast({
+      title: "Getting Started",
+      description: "Setting up your account...",
+    });
+    
+    // In a real app, this would create an account or navigate to sign-up
+    setTimeout(() => {
+      navigate('/dashboard');
+    }, 1500);
+  };
+
+  const handleWatchDemo = () => {
+    setIsWatchingDemo(true);
+    
+    // In a real app, this would play a demo video
+    // For now, let's navigate to a demo section or show a toast
+    toast({
+      title: "Demo Mode",
+      description: "Welcome to the MeetEase demo!",
+    });
+    
+    // Smoothly scroll to the demo section
+    const demoSection = document.getElementById('demo-section');
+    if (demoSection) {
+      demoSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="relative overflow-hidden pt-28 pb-16 md:pt-32 md:pb-24" ref={heroRef}>
       <div className="absolute inset-0 -z-10">
@@ -70,23 +103,46 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 animate-fade-in [animation-delay:600ms]">
-            <GradientButton size="lg" className="group">
+            <GradientButton size="lg" className="group" onClick={handleGetStarted}>
               Get Started Free
               <ArrowRight className="ml-2 w-4 h-4 inline-block transition-transform group-hover:translate-x-1" />
             </GradientButton>
-            <GradientButton size="lg" variant="outline">
+            <GradientButton size="lg" variant="outline" onClick={handleWatchDemo}>
               Watch Demo
             </GradientButton>
           </div>
           
-          <div className="mt-16 w-full max-w-5xl mx-auto animate-fade-in [animation-delay:800ms]">
+          <div className="mt-16 w-full max-w-5xl mx-auto animate-fade-in [animation-delay:800ms]" id="demo-section">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent z-10 h-20 bottom-0" />
-              <img 
-                src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1024&q=80" 
-                alt="MeetEase Dashboard" 
-                className="w-full h-auto object-cover rounded-t-2xl shadow-xl"
-              />
+              {isWatchingDemo ? (
+                <div className="aspect-video bg-gray-100 rounded-t-2xl shadow-xl flex items-center justify-center">
+                  <div className="text-center p-8">
+                    <h3 className="text-xl font-semibold mb-4">MeetEase Demo</h3>
+                    <p className="mb-6">Experience how MeetEase can transform your scheduling workflow.</p>
+                    <div className="flex justify-center">
+                      <GradientButton onClick={() => {
+                        toast({
+                          title: "Demo Experience",
+                          description: "Scroll down to see our scheduling features in action!",
+                        });
+                        const scheduleSection = document.querySelector('[id^="schedule-demo"]');
+                        if (scheduleSection) {
+                          scheduleSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}>
+                        Try It Yourself
+                      </GradientButton>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <img 
+                  src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1024&q=80" 
+                  alt="MeetEase Dashboard" 
+                  className="w-full h-auto object-cover rounded-t-2xl shadow-xl"
+                />
+              )}
             </div>
           </div>
         </div>
