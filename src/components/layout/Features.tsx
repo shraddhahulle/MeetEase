@@ -1,7 +1,7 @@
 
 import React from 'react';
 import FeatureCard from '../ui/FeatureCard';
-import ScheduleDemo from '../ui/ScheduleDemo';
+import { ScheduleDemo } from '../ui/ScheduleDemo';
 import { 
   Calendar, Clock, Users, Bot, Video, Bell, 
   PanelLeft, Moon, FileText, Laptop, Shield 
