@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Calendar, Clock, Users, CheckCircle, Google, Mail, CalendarDays } from 'lucide-react';
+import { Calendar, Clock, Users, CheckCircle, Mail, CalendarDays, Globe } from 'lucide-react';
 import GradientButton from './GradientButton';
 import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
@@ -121,7 +121,7 @@ const ScheduleDemo = () => {
               onClick={() => handleCalendarConnect('Google')}
               className="flex items-center justify-center gap-2 p-2 border rounded-lg hover:bg-gray-50 transition-colors"
             >
-              <Google className="w-5 h-5 text-red-500" />
+              <Globe className="w-5 h-5 text-red-500" />
               <span>Google Calendar</span>
             </button>
             <button
