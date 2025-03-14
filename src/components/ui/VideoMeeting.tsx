@@ -5,7 +5,7 @@ import {
   Mic, MicOff, Video, VideoOff, Users, MessageSquare, Share, 
   MoreVertical, Search, ListChecks, Clock, Calendar, BrainCircuit,
   Download, Send, BarChart, PieChart, ThumbsUp, ThumbsDown, Flag,
-  FileText, CheckCircle2, BookmarkPlus, AlertTriangle
+  FileText, CheckCircle2, BookmarkPlus, AlertTriangle, Mail
 } from 'lucide-react';
 import { Button } from './button';
 import { Input } from './input';
