@@ -689,5 +689,5 @@ export const VideoMeeting = () => {
   );
 };
 
-// Import missing icons
-import { ListChecks, CheckCircle2, FileText } from 'lucide-react';
+// Remove the duplicate imports here - this is what's causing the errors
+
