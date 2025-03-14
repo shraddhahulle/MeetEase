@@ -19,17 +19,23 @@ import {
   LogOut,
   BellRing,
   MessageSquare,
-  VideoIcon
+  VideoIcon,
+  History
 } from 'lucide-react';
 import { ScheduleDemo } from '@/components/ui/ScheduleDemo';
 import { VideoMeeting } from '@/components/ui/VideoMeeting';
 import { TeamMembers } from '@/components/ui/TeamMembers';
 import { ReminderExample } from '@/components/ui/ReminderExample';
+import { PastMeetingVideo } from '@/components/ui/PastMeetingVideo';
+import { UserProfile } from '@/components/ui/UserProfile';
 
 // Sample meetings data - in a real app, this would come from an API
 const initialMeetings = [
   { id: 1, title: 'Team Standup', date: '2025-10-24', time: '09:00 AM', attendees: 5, notified: false },
   { id: 2, title: 'Product Review', date: '2025-10-25', time: '02:30 PM', attendees: 3, notified: false },
+  { id: 3, title: 'Client Presentation', date: '2025-10-27', time: '11:00 AM', attendees: 7, notified: false },
+  { id: 4, title: 'Design Workshop', date: '2025-10-28', time: '10:00 AM', attendees: 4, notified: false },
+  { id: 5, title: 'Marketing Strategy', date: '2025-10-30', time: '03:00 PM', attendees: 6, notified: false },
 ];
 
 // Sample previous meeting notes
@@ -55,6 +61,17 @@ const previousMeetingNotes = [
       'Allocate more time for testing the payment gateway',
       'Schedule a dedicated security review session'
     ]
+  },
+  {
+    id: 3,
+    title: 'UX Review Session',
+    date: '2025-10-15',
+    summary: 'Reviewed user feedback and identified key areas for improvement in the mobile app interface.',
+    aiSuggestions: [
+      'Simplify the onboarding flow to reduce drop-off rate',
+      'Add progress indicators for multi-step processes',
+      'Increase touch target sizes on mobile navigation elements'
+    ]
   }
 ];
 
@@ -71,6 +88,7 @@ const Dashboard = () => {
     participants: '',
     description: ''
   });
+  const [isCalendarConnected, setIsCalendarConnected] = useState(false);
 
   // Check if any meetings are coming up in 2 days and notify
   useEffect(() => {
@@ -187,9 +205,17 @@ const Dashboard = () => {
   
   const connectCalendar = () => {
     toast({
-      title: "Calendar Connected",
-      description: "Your calendar has been successfully connected!",
+      title: "Connecting Calendar",
+      description: "Establishing connection with your calendar...",
     });
+    
+    setTimeout(() => {
+      setIsCalendarConnected(true);
+      toast({
+        title: "Calendar Connected",
+        description: "Your calendar has been successfully connected! Your meetings have been synced.",
+      });
+    }, 1500);
   };
   
   const handleAISuggestions = () => {
@@ -228,8 +254,8 @@ const Dashboard = () => {
       </div>
 
       {/* Sidebar */}
-      <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-0 bg-white shadow-md w-48 transition-transform duration-300 ease-in-out z-40 lg:z-auto`}>
-        <div className="p-2 border-b flex items-center justify-center">
+      <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-0 bg-indigo-900 text-white shadow-md w-44 transition-transform duration-300 ease-in-out z-40 lg:z-auto`}>
+        <div className="p-2 border-b border-indigo-700 flex items-center justify-center">
           <LogoImage size="sm" />
         </div>
         
@@ -238,86 +264,95 @@ const Dashboard = () => {
             <li>
               <button 
                 onClick={() => setActiveTab('overview')} 
-                className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'overview' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
+                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'overview' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
               >
                 <Calendar className="w-4 h-4" />
-                <span>Overview</span>
+                <span className="text-sm">Overview</span>
               </button>
             </li>
             <li>
               <button 
                 onClick={() => setActiveTab('meetings')} 
-                className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'meetings' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
+                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'meetings' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
               >
                 <Clock className="w-4 h-4" />
-                <span>My Meetings</span>
+                <span className="text-sm">My Meetings</span>
+              </button>
+            </li>
+            <li>
+              <button 
+                onClick={() => setActiveTab('pastMeetings')} 
+                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'pastMeetings' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
+              >
+                <History className="w-4 h-4" />
+                <span className="text-sm">Past Meetings</span>
               </button>
             </li>
             <li>
               <button 
                 onClick={() => setActiveTab('schedule')} 
-                className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'schedule' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
+                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'schedule' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
               >
                 <CalendarDays className="w-4 h-4" />
-                <span>Schedule</span>
+                <span className="text-sm">Schedule</span>
               </button>
             </li>
             <li>
               <button 
                 onClick={() => setActiveTab('team')} 
-                className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'team' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
+                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'team' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
               >
                 <Users className="w-4 h-4" />
-                <span>Team</span>
+                <span className="text-sm">Team</span>
               </button>
             </li>
             <li>
               <button 
                 onClick={() => setActiveTab('videos')} 
-                className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'videos' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
+                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'videos' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
               >
                 <VideoIcon className="w-4 h-4" />
-                <span>Video Meeting</span>
+                <span className="text-sm">Video Meeting</span>
               </button>
             </li>
             <li>
               <button 
                 onClick={() => setActiveTab('ai')} 
-                className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'ai' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
+                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'ai' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
               >
                 <MessageSquare className="w-4 h-4" />
-                <span>AI Notes</span>
+                <span className="text-sm">AI Notes</span>
               </button>
             </li>
             <li>
               <button 
                 onClick={() => setActiveTab('reminders')} 
-                className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'reminders' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
+                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'reminders' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
               >
                 <BellRing className="w-4 h-4" />
-                <span>Reminders</span>
+                <span className="text-sm">Reminders</span>
               </button>
             </li>
           </ul>
           
-          <div className="mt-3 pt-3 border-t">
+          <div className="mt-3 pt-3 border-t border-indigo-700">
             <ul className="space-y-0.5">
               <li>
                 <button 
                   onClick={() => setActiveTab('settings')} 
-                  className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'settings' ? 'bg-meetease-blue text-white' : 'hover:bg-gray-100'}`}
+                  className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'settings' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
                 >
                   <Settings className="w-4 h-4" />
-                  <span>Settings</span>
+                  <span className="text-sm">Settings</span>
                 </button>
               </li>
               <li>
                 <button 
                   onClick={handleLogout} 
-                  className="w-full text-left p-2 rounded-lg flex items-center gap-2 text-red-500 hover:bg-red-50 transition-colors"
+                  className="w-full text-left p-1.5 rounded-lg flex items-center gap-2 text-red-300 hover:bg-red-900/30 transition-colors"
                 >
                   <LogOut className="w-4 h-4" />
-                  <span>Logout</span>
+                  <span className="text-sm">Logout</span>
                 </button>
               </li>
             </ul>
@@ -329,9 +364,10 @@ const Dashboard = () => {
       <div className="flex-1">
         <header className="bg-white shadow-sm sticky top-0 z-30">
           <div className="container mx-auto px-4 py-2 flex justify-between items-center">
-            <h1 className="text-lg font-bold">
+            <h1 className="text-lg font-bold text-indigo-900">
               {activeTab === 'overview' && 'Dashboard Overview'}
               {activeTab === 'meetings' && 'My Meetings'}
+              {activeTab === 'pastMeetings' && 'Past Meetings'}
               {activeTab === 'schedule' && 'Schedule'}
               {activeTab === 'team' && 'Team Members'}
               {activeTab === 'videos' && 'Video Meeting'}
@@ -339,14 +375,24 @@ const Dashboard = () => {
               {activeTab === 'reminders' && 'Meeting Reminders'}
               {activeTab === 'settings' && 'Settings'}
             </h1>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
+              {/* Notification icon */}
               <Button 
-                variant="outline" 
-                onClick={() => navigate('/')}
-                size="sm"
+                variant="ghost" 
+                size="icon"
+                className="text-indigo-600"
+                onClick={() => {
+                  toast({
+                    title: "Notifications",
+                    description: "You have 3 unread notifications",
+                  });
+                }}
               >
-                Back to Home
+                <Bell className="h-5 w-5" />
               </Button>
+              
+              {/* User profile */}
+              <UserProfile />
             </div>
           </div>
         </header>
@@ -356,7 +402,7 @@ const Dashboard = () => {
           {activeTab === 'overview' && (
             <div>
               <div className="bg-white rounded-xl shadow-md p-4 mb-4">
-                <h2 className="text-xl font-bold mb-3">Welcome to Your Dashboard</h2>
+                <h2 className="text-xl font-bold mb-3 text-indigo-900">Welcome to Your Dashboard</h2>
                 <p className="text-gray-600 mb-4">
                   Use the dashboard to manage your meetings and schedule. You'll receive email reminders two days before your meetings.
                 </p>
@@ -364,9 +410,9 @@ const Dashboard = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
                   <button 
                     onClick={() => setActiveTab('meetings')}
-                    className="bg-meetease-blue/10 rounded-lg p-3 flex items-center hover:bg-meetease-blue/20 transition-colors"
+                    className="bg-indigo-50 rounded-lg p-3 flex items-center hover:bg-indigo-100 transition-colors"
                   >
-                    <Calendar className="w-8 h-8 text-meetease-blue mr-3" />
+                    <Calendar className="w-8 h-8 text-indigo-600 mr-3" />
                     <div className="text-left">
                       <h3 className="font-medium">Upcoming Meetings</h3>
                       <p className="text-sm text-gray-600">{meetings.length} meetings scheduled</p>
@@ -375,9 +421,9 @@ const Dashboard = () => {
                   
                   <button 
                     onClick={() => setActiveTab('ai')}
-                    className="bg-meetease-purple/10 rounded-lg p-3 flex items-center hover:bg-meetease-purple/20 transition-colors"
+                    className="bg-purple-50 rounded-lg p-3 flex items-center hover:bg-purple-100 transition-colors"
                   >
-                    <MessageSquare className="w-8 h-8 text-meetease-purple mr-3" />
+                    <MessageSquare className="w-8 h-8 text-purple-600 mr-3" />
                     <div className="text-left">
                       <h3 className="font-medium">AI Suggestions</h3>
                       <p className="text-sm text-gray-600">View your meeting notes</p>
@@ -386,9 +432,9 @@ const Dashboard = () => {
                   
                   <button 
                     onClick={() => setActiveTab('team')}
-                    className="bg-meetease-indigo/10 rounded-lg p-3 flex items-center hover:bg-meetease-indigo/20 transition-colors"
+                    className="bg-green-50 rounded-lg p-3 flex items-center hover:bg-green-100 transition-colors"
                   >
-                    <Users className="w-8 h-8 text-meetease-indigo mr-3" />
+                    <Users className="w-8 h-8 text-green-600 mr-3" />
                     <div className="text-left">
                       <h3 className="font-medium">Team Members</h3>
                       <p className="text-sm text-gray-600">4 team members</p>
@@ -397,9 +443,13 @@ const Dashboard = () => {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <GradientButton onClick={connectCalendar} size="sm">
+                  <GradientButton 
+                    onClick={connectCalendar} 
+                    size="sm"
+                    className={isCalendarConnected ? "bg-green-600 hover:bg-green-700" : ""}
+                  >
                     <CalendarDays className="w-4 h-4 mr-2" />
-                    Connect Calendar
+                    {isCalendarConnected ? "Calendar Connected" : "Connect Calendar"}
                   </GradientButton>
                   
                   <GradientButton variant="secondary" onClick={handleNewMeeting} size="sm">
@@ -416,7 +466,7 @@ const Dashboard = () => {
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                 <div className="bg-white rounded-xl shadow-md p-4">
-                  <h3 className="text-lg font-bold mb-3">Upcoming Meetings</h3>
+                  <h3 className="text-lg font-bold mb-3 text-indigo-900">Upcoming Meetings</h3>
                   {meetings.length > 0 ? (
                     <div className="overflow-x-auto">
                       <table className="min-w-full divide-y divide-gray-200">
@@ -429,7 +479,7 @@ const Dashboard = () => {
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                          {meetings.map((meeting) => (
+                          {meetings.slice(0, 3).map((meeting) => (
                             <tr key={meeting.id}>
                               <td className="px-4 py-2 whitespace-nowrap">{meeting.title}</td>
                               <td className="px-4 py-2 whitespace-nowrap">{meeting.date}</td>
@@ -443,10 +493,22 @@ const Dashboard = () => {
                   ) : (
                     <p className="text-gray-500">No meetings scheduled yet.</p>
                   )}
+                  {meetings.length > 3 && (
+                    <div className="mt-3">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full"
+                        onClick={() => setActiveTab('meetings')}
+                      >
+                        View all {meetings.length} meetings
+                      </Button>
+                    </div>
+                  )}
                 </div>
                 
                 <div className="bg-white rounded-xl shadow-md p-4">
-                  <h3 className="text-lg font-bold mb-3">Team Members</h3>
+                  <h3 className="text-lg font-bold mb-3 text-indigo-900">Team Members</h3>
                   <div className="flex flex-wrap gap-2 mb-3">
                     <div className="flex -space-x-2">
                       <img 
@@ -485,29 +547,30 @@ const Dashboard = () => {
               
               <div className="bg-white rounded-xl shadow-md p-4">
                 <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-lg font-bold">Recent AI Meeting Notes</h3>
+                  <h3 className="text-lg font-bold text-indigo-900">Recent AI Meeting Notes</h3>
                   <Button 
                     variant="ghost" 
                     size="sm"
                     onClick={() => setActiveTab('ai')}
+                    className="text-indigo-600"
                   >
                     View All
                   </Button>
                 </div>
                 <div className="space-y-3">
-                  {previousMeetingNotes.map(note => (
+                  {previousMeetingNotes.slice(0, 2).map(note => (
                     <div key={note.id} className="border rounded-lg p-3 hover:shadow-sm">
                       <div className="flex justify-between mb-1">
                         <h4 className="font-medium">{note.title}</h4>
                         <span className="text-sm text-gray-500">{note.date}</span>
                       </div>
                       <p className="text-sm text-gray-600 mb-2">{note.summary}</p>
-                      <div className="bg-blue-50 p-2 rounded-lg">
-                        <div className="text-xs text-blue-600 font-medium mb-1">AI Suggestions:</div>
+                      <div className="bg-purple-50 p-2 rounded-lg">
+                        <div className="text-xs text-purple-600 font-medium mb-1">AI Suggestions:</div>
                         <ul className="text-xs text-gray-700 space-y-1">
                           {note.aiSuggestions.map((suggestion, idx) => (
                             <li key={idx} className="flex items-start">
-                              <span className="inline-block w-3 h-3 rounded-full bg-blue-200 mr-2 mt-1"></span>
+                              <span className="inline-block w-1.5 h-1.5 rounded-full bg-purple-400 mt-1.5 mr-1.5"></span>
                               {suggestion}
                             </li>
                           ))}
@@ -524,7 +587,7 @@ const Dashboard = () => {
           {activeTab === 'meetings' && (
             <div className="bg-white rounded-xl shadow-md p-4">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold">My Meetings</h2>
+                <h2 className="text-xl font-bold text-indigo-900">My Meetings</h2>
                 <GradientButton onClick={handleNewMeeting} size="sm">
                   <Plus className="w-4 h-4 mr-2" />
                   New Meeting
@@ -591,12 +654,45 @@ const Dashboard = () => {
               )}
             </div>
           )}
+          
+          {/* Past Meetings Tab */}
+          {activeTab === 'pastMeetings' && (
+            <div>
+              <div className="bg-white rounded-xl shadow-md p-4 mb-4">
+                <h2 className="text-xl font-bold mb-4 text-indigo-900">Past Meetings</h2>
+                <div className="space-y-4">
+                  <PastMeetingVideo />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {previousMeetingNotes.map(note => (
+                      <div key={note.id} className="border rounded-lg overflow-hidden bg-white shadow-sm">
+                        <div className="border-b p-3">
+                          <h3 className="font-medium">{note.title}</h3>
+                          <p className="text-sm text-gray-500">{note.date}</p>
+                        </div>
+                        <div className="p-3">
+                          <p className="text-sm text-gray-600 mb-2">{note.summary}</p>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="w-full text-indigo-600"
+                            onClick={() => setActiveTab('ai')}
+                          >
+                            View AI Notes
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Schedule Tab */}
           {activeTab === 'schedule' && (
             <div>
               <div className="bg-white rounded-xl shadow-md p-4 mb-4">
-                <h2 className="text-xl font-bold mb-4">Schedule a Meeting</h2>
+                <h2 className="text-xl font-bold mb-4 text-indigo-900">Schedule a Meeting</h2>
                 <ScheduleDemo />
               </div>
             </div>
@@ -622,11 +718,11 @@ const Dashboard = () => {
           {activeTab === 'ai' && (
             <div>
               <div className="bg-white rounded-xl shadow-md p-4 mb-4">
-                <h2 className="text-xl font-bold mb-4">AI Meeting Notes</h2>
+                <h2 className="text-xl font-bold mb-4 text-indigo-900">AI Meeting Notes</h2>
                 
                 <div className="mb-4">
                   <div className="bg-purple-50 border border-purple-100 rounded-lg p-4 mb-4">
-                    <h3 className="font-medium text-lg mb-2">How AI Helps Your Meetings</h3>
+                    <h3 className="font-medium text-lg mb-2 text-purple-800">How AI Helps Your Meetings</h3>
                     <ul className="space-y-2">
                       <li className="flex">
                         <div className="mr-3 text-purple-500">1.</div>
@@ -659,7 +755,7 @@ const Dashboard = () => {
                     </ul>
                   </div>
                   
-                  <h3 className="font-bold text-lg mb-3">Recent Meeting Notes</h3>
+                  <h3 className="font-bold text-lg mb-3 text-indigo-900">Recent Meeting Notes</h3>
                   <div className="space-y-4">
                     {previousMeetingNotes.map(note => (
                       <div key={note.id} className="border rounded-lg overflow-hidden">
@@ -668,7 +764,13 @@ const Dashboard = () => {
                             <h4 className="font-medium">{note.title}</h4>
                             <p className="text-sm text-gray-500">{note.date}</p>
                           </div>
-                          <Button variant="outline" size="sm">View Full Transcript</Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="text-indigo-600"
+                          >
+                            View Full Transcript
+                          </Button>
                         </div>
                         <div className="p-3">
                           <h5 className="font-medium text-sm text-gray-700 mb-2">Summary</h5>
@@ -678,7 +780,7 @@ const Dashboard = () => {
                           <ul className="text-sm space-y-2">
                             {note.aiSuggestions.map((suggestion, idx) => (
                               <li key={idx} className="flex items-start">
-                                <span className="inline-block w-4 h-4 rounded-full bg-blue-100 text-blue-600 flex-shrink-0 text-xs flex items-center justify-center mr-2 mt-0.5">
+                                <span className="inline-block w-4 h-4 rounded-full bg-purple-100 text-purple-600 flex-shrink-0 text-xs flex items-center justify-center mr-2 mt-0.5">
                                   {idx + 1}
                                 </span>
                                 <span className="text-gray-700">{suggestion}</span>
@@ -695,7 +797,7 @@ const Dashboard = () => {
                   <p className="text-gray-500 mb-3">Start recording your meeting to generate AI notes</p>
                   <Button 
                     onClick={() => setActiveTab('videos')}
-                    className="bg-meetease-purple hover:bg-meetease-purple/90"
+                    className="bg-indigo-600 hover:bg-indigo-700"
                   >
                     <VideoIcon className="w-4 h-4 mr-2" />
                     Join Video Meeting
@@ -709,7 +811,7 @@ const Dashboard = () => {
           {activeTab === 'reminders' && (
             <div>
               <div className="bg-white rounded-xl shadow-md p-4 mb-4">
-                <h2 className="text-xl font-bold mb-4">Meeting Reminders</h2>
+                <h2 className="text-xl font-bold mb-4 text-indigo-900">Meeting Reminders</h2>
                 <ReminderExample />
               </div>
             </div>
@@ -718,7 +820,7 @@ const Dashboard = () => {
           {/* Settings Tab */}
           {activeTab === 'settings' && (
             <div className="bg-white rounded-xl shadow-md p-4">
-              <h2 className="text-xl font-bold mb-4">Account Settings</h2>
+              <h2 className="text-xl font-bold mb-4 text-indigo-900">Account Settings</h2>
               <div className="space-y-4">
                 <div className="border-b pb-4">
                   <h3 className="text-lg font-medium mb-3">Profile Information</h3>
@@ -749,21 +851,21 @@ const Dashboard = () => {
                       <span>Email Notifications</span>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" defaultChecked className="sr-only peer" />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-meetease-blue"></div>
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                       </label>
                     </div>
                     <div className="flex items-center justify-between">
                       <span>Calendar Reminders</span>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" defaultChecked className="sr-only peer" />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-meetease-blue"></div>
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                       </label>
                     </div>
                     <div className="flex items-center justify-between">
                       <span>Two-Day Meeting Reminders</span>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" defaultChecked className="sr-only peer" />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-meetease-blue"></div>
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                       </label>
                     </div>
                   </div>
@@ -778,6 +880,7 @@ const Dashboard = () => {
                       });
                     }}
                     size="sm"
+                    className="bg-indigo-600 hover:bg-indigo-700"
                   >
                     <CheckCircle className="w-4 h-4 mr-2" />
                     Save Changes
@@ -791,7 +894,7 @@ const Dashboard = () => {
           {showNewMeetingForm && (
             <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-4 max-h-[90vh] overflow-y-auto">
-                <h3 className="text-xl font-bold mb-3">Schedule New Meeting</h3>
+                <h3 className="text-xl font-bold mb-3 text-indigo-900">Schedule New Meeting</h3>
                 
                 <div className="space-y-3 mb-4">
                   <div>
@@ -861,7 +964,10 @@ const Dashboard = () => {
                   >
                     Cancel
                   </Button>
-                  <GradientButton onClick={handleCreateMeeting}>
+                  <GradientButton 
+                    onClick={handleCreateMeeting}
+                    className="bg-indigo-600 hover:bg-indigo-700"
+                  >
                     Schedule Meeting
                   </GradientButton>
                 </div>

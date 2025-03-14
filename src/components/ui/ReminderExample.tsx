@@ -1,19 +1,28 @@
 
 import React, { useState } from 'react';
-import { Calendar, Bell, Mail, ExternalLink } from 'lucide-react';
+import { Calendar, Bell, Mail, ExternalLink, CheckCircle } from 'lucide-react';
 import { Button } from './button';
 import { toast } from '@/hooks/use-toast';
 
 export const ReminderExample = () => {
   const [showPreview, setShowPreview] = useState(false);
+  const [notificationSent, setNotificationSent] = useState(false);
   
   const handleDemoReminder = () => {
-    toast({
-      title: "Demo Reminder Triggered",
-      description: "This shows how users receive email and app notifications 2 days before meetings",
-    });
-    
-    setShowPreview(true);
+    if (!notificationSent) {
+      toast({
+        title: "Demo Reminder Triggered",
+        description: "This shows how users receive email and app notifications 2 days before meetings",
+      });
+      
+      setShowPreview(true);
+      setNotificationSent(true);
+    } else {
+      toast({
+        title: "Notification Acknowledged",
+        description: "You've confirmed your upcoming meeting.",
+      });
+    }
   };
   
   return (
@@ -25,33 +34,40 @@ export const ReminderExample = () => {
       </p>
       
       <div className="flex flex-col space-y-4 mb-4">
-        <div className="flex items-start border rounded-lg p-3 bg-blue-50">
-          <Calendar className="h-5 w-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0" />
+        <div className="flex items-start border rounded-lg p-3 bg-green-50">
+          <Calendar className="h-5 w-5 text-green-500 mt-0.5 mr-3 flex-shrink-0" />
           <div>
             <h4 className="font-medium">Scheduled Meeting</h4>
-            <p className="text-sm text-gray-600">When a meeting is scheduled, it's added to the system</p>
+            <p className="text-sm text-gray-600">When a meeting is scheduled, it's added to your calendar</p>
+          </div>
+        </div>
+        
+        <div className="flex items-start border rounded-lg p-3 bg-indigo-50">
+          <Bell className="h-5 w-5 text-indigo-500 mt-0.5 mr-3 flex-shrink-0" />
+          <div>
+            <h4 className="font-medium">2 Days Before</h4>
+            <p className="text-sm text-gray-600">The system automatically checks upcoming meetings and sends reminders</p>
           </div>
         </div>
         
         <div className="flex items-start border rounded-lg p-3 bg-purple-50">
-          <Bell className="h-5 w-5 text-purple-500 mt-0.5 mr-3 flex-shrink-0" />
-          <div>
-            <h4 className="font-medium">2 Days Before</h4>
-            <p className="text-sm text-gray-600">The system automatically checks upcoming meetings and triggers reminders</p>
-          </div>
-        </div>
-        
-        <div className="flex items-start border rounded-lg p-3 bg-green-50">
-          <Mail className="h-5 w-5 text-green-500 mt-0.5 mr-3 flex-shrink-0" />
+          <Mail className="h-5 w-5 text-purple-500 mt-0.5 mr-3 flex-shrink-0" />
           <div>
             <h4 className="font-medium">Reminder Sent</h4>
-            <p className="text-sm text-gray-600">Users receive both email notifications and in-app reminders</p>
+            <p className="text-sm text-gray-600">You receive both email notifications and in-app reminders</p>
           </div>
         </div>
       </div>
       
-      <Button onClick={handleDemoReminder} className="w-full mb-4">
-        See an Example Reminder
+      <Button onClick={handleDemoReminder} className="w-full mb-4 bg-indigo-600 hover:bg-indigo-700">
+        {notificationSent ? (
+          <>
+            <CheckCircle className="h-4 w-4 mr-2" />
+            Confirm Attendance
+          </>
+        ) : (
+          "See an Example Reminder"
+        )}
       </Button>
       
       {showPreview && (
@@ -69,7 +85,7 @@ export const ReminderExample = () => {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <div className="font-medium">Upcoming Meeting Reminder</div>
-                <div className="text-sm text-gray-500">From: noreply@meetease.com</div>
+                <div className="text-sm text-gray-500">From: notifications@meetapp.com</div>
               </div>
               <div className="text-sm text-gray-500">2 days ago</div>
             </div>
@@ -80,7 +96,7 @@ export const ReminderExample = () => {
                 This is a friendly reminder that you have an upcoming meeting:
               </p>
               
-              <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-3">
+              <div className="bg-indigo-50 border border-indigo-100 rounded-lg p-3 mb-3">
                 <p className="font-medium">Team Standup</p>
                 <p className="text-sm">Date: Oct 24, 2025</p>
                 <p className="text-sm">Time: 09:00 AM</p>
@@ -92,7 +108,7 @@ export const ReminderExample = () => {
               </p>
               
               <div className="text-center">
-                <Button className="w-full mb-2">View Meeting Details</Button>
+                <Button className="w-full mb-2 bg-indigo-600 hover:bg-indigo-700">View Meeting Details</Button>
                 <Button variant="outline" className="w-full">Add to Calendar</Button>
               </div>
             </div>

@@ -1,13 +1,31 @@
 
 import React, { useState } from 'react';
 import { toast } from '@/hooks/use-toast';
-import { Mic, MicOff, Video, VideoOff, Users, MessageSquare } from 'lucide-react';
+import { Mic, MicOff, Video, VideoOff, Users, MessageSquare, Share, MoreVertical } from 'lucide-react';
 import { Button } from './button';
 import GradientButton from './GradientButton';
 
 export const VideoMeeting = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [meetingNotes, setMeetingNotes] = useState<string | null>(null);
+  const [isMicOn, setIsMicOn] = useState(true);
+  const [isVideoOn, setIsVideoOn] = useState(true);
+  
+  const toggleMic = () => {
+    setIsMicOn(!isMicOn);
+    toast({
+      title: isMicOn ? "Microphone Off" : "Microphone On",
+      description: isMicOn ? "Your microphone has been muted" : "Your microphone is now active",
+    });
+  };
+  
+  const toggleVideo = () => {
+    setIsVideoOn(!isVideoOn);
+    toast({
+      title: isVideoOn ? "Video Off" : "Video On",
+      description: isVideoOn ? "Your camera has been turned off" : "Your camera is now active",
+    });
+  };
   
   const handleRecord = () => {
     setIsRecording(!isRecording);
@@ -57,6 +75,13 @@ export const VideoMeeting = () => {
     }
   };
   
+  const shareScreen = () => {
+    toast({
+      title: "Screen Sharing",
+      description: "You are now sharing your screen with all participants.",
+    });
+  };
+  
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden">
       <div className="relative">
@@ -65,8 +90,16 @@ export const VideoMeeting = () => {
           <img 
             src="https://images.unsplash.com/photo-1516387938699-a93567ec168e?q=80&w=1000&auto=format&fit=crop" 
             alt="Team meeting" 
-            className="w-full h-full object-cover opacity-80"
+            className={`w-full h-full object-cover ${isVideoOn ? 'opacity-80' : 'hidden'}`}
           />
+          
+          {!isVideoOn && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="bg-gray-700 rounded-full w-20 h-20 flex items-center justify-center">
+                <span className="text-white text-xl font-medium">DU</span>
+              </div>
+            </div>
+          )}
           
           {/* Participant videos */}
           <div className="absolute bottom-3 right-3 flex space-x-2">
@@ -107,14 +140,23 @@ export const VideoMeeting = () => {
             <Button 
               variant="ghost" 
               className="bg-white/20 text-white hover:bg-white/40"
+              onClick={toggleMic}
             >
-              <Mic className="h-5 w-5" />
+              {isMicOn ? <Mic className="h-5 w-5" /> : <MicOff className="h-5 w-5" />}
             </Button>
             <Button 
               variant="ghost" 
               className="bg-white/20 text-white hover:bg-white/40"
+              onClick={toggleVideo}
             >
-              <Video className="h-5 w-5" />
+              {isVideoOn ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
+            </Button>
+            <Button 
+              variant="ghost" 
+              className="bg-white/20 text-white hover:bg-white/40"
+              onClick={shareScreen}
+            >
+              <Share className="h-5 w-5" />
             </Button>
             <Button 
               variant="ghost" 
@@ -147,7 +189,16 @@ export const VideoMeeting = () => {
               <MessageSquare className="h-4 w-4 mr-2" />
               AI Assistant Notes
             </h3>
-            <Button variant="outline" size="sm">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => {
+                toast({
+                  title: "Notes Copied",
+                  description: "Meeting notes copied to clipboard",
+                });
+              }}
+            >
               Copy Notes
             </Button>
           </div>
