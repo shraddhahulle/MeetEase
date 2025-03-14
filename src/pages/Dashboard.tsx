@@ -20,7 +20,8 @@ import {
   BellRing,
   MessageSquare,
   VideoIcon,
-  History
+  History,
+  Bell
 } from 'lucide-react';
 import { ScheduleDemo } from '@/components/ui/ScheduleDemo';
 import { VideoMeeting } from '@/components/ui/VideoMeeting';
