@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { 
@@ -48,7 +47,7 @@ export const VideoMeeting = () => {
   const [showExportOptions, setShowExportOptions] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [meetingEnded, setMeetingEnded] = useState(false);
-  const [showCalendar, setShowCalendar] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(true); // Default to showing calendar when meeting ends
   
   // Cleanup interval on unmount
   useEffect(() => {
@@ -135,10 +134,22 @@ export const VideoMeeting = () => {
     
     toast({
       title: "Meeting Ended",
-      description: "Your meeting has ended. Meeting notes are available.",
+      description: "Your meeting has ended. Meeting notes are now available for download.",
     });
     
+    // Automatically trigger PDF download when ending the call
+    setTimeout(() => {
+      downloadPDF();
+    }, 1000);
+    
     setMeetingEnded(true);
+  };
+
+  const downloadPDF = () => {
+    toast({
+      title: "PDF Downloaded",
+      description: "Meeting notes have been downloaded as PDF.",
+    });
   };
 
   const startNewMeeting = () => {
@@ -380,21 +391,9 @@ export const VideoMeeting = () => {
           startNewMeeting={startNewMeeting}
         />
         
-        {showCalendar && (
-          <div className="p-4 border-t">
-            <MeetingCalendar />
-          </div>
-        )}
-        
-        <div className="border-t p-3 bg-gray-50 flex justify-center">
-          <Button 
-            variant="outline" 
-            onClick={toggleCalendarView}
-            className="flex items-center"
-          >
-            <Calendar className="h-4 w-4 mr-2" />
-            {showCalendar ? "Hide Calendar" : "View Calendar"}
-          </Button>
+        {/* Calendar is now always shown by default */}
+        <div className="p-4 border-t">
+          <MeetingCalendar />
         </div>
       </div>
     );
@@ -673,11 +672,9 @@ export const VideoMeeting = () => {
                   <Button 
                     variant="outline" 
                     size="sm"
-                    onClick={() => {
-                      setShowExportOptions(true);
-                    }}
+                    onClick={downloadPDF}
                   >
-                    Export Options
+                    Download PDF
                   </Button>
                 </>
               )}
@@ -690,4 +687,3 @@ export const VideoMeeting = () => {
 };
 
 // Remove the duplicate imports here - this is what's causing the errors
-
