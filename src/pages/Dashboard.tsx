@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
@@ -20,17 +19,15 @@ import {
   BellRing,
   MessageSquare,
   VideoIcon,
-  History,
   Bell
 } from 'lucide-react';
 import { ScheduleDemo } from '@/components/ui/ScheduleDemo';
 import { VideoMeeting } from '@/components/ui/VideoMeeting';
 import { TeamMembers } from '@/components/ui/TeamMembers';
 import { ReminderExample } from '@/components/ui/ReminderExample';
-import { PastMeetingVideo } from '@/components/ui/PastMeetingVideo';
 import { UserProfile } from '@/components/ui/UserProfile';
+import { DigitalCalendar } from '@/components/calendar/DigitalCalendar';
 
-// Sample meetings data - in a real app, this would come from an API
 const initialMeetings = [
   { id: 1, title: 'Team Standup', date: '2025-10-24', time: '09:00 AM', attendees: 5, notified: false },
   { id: 2, title: 'Product Review', date: '2025-10-25', time: '02:30 PM', attendees: 3, notified: false },
@@ -39,7 +36,6 @@ const initialMeetings = [
   { id: 5, title: 'Marketing Strategy', date: '2025-10-30', time: '03:00 PM', attendees: 6, notified: false },
 ];
 
-// Sample previous meeting notes
 const previousMeetingNotes = [
   {
     id: 1,
@@ -91,7 +87,6 @@ const Dashboard = () => {
   });
   const [isCalendarConnected, setIsCalendarConnected] = useState(false);
 
-  // Check if any meetings are coming up in 2 days and notify
   useEffect(() => {
     const checkUpcomingMeetings = () => {
       const today = new Date();
@@ -111,13 +106,11 @@ const Dashboard = () => {
           meetingDate.getTime() === twoDaysLater.getTime() && 
           !meeting.notified
         ) {
-          // In a real app, this would send an email
           toast({
             title: "Upcoming Meeting Reminder",
             description: `Your meeting "${meeting.title}" is coming up in 2 days on ${meeting.date} at ${meeting.time}`,
           });
           
-          // Mark as notified
           setMeetings(prevMeetings => 
             prevMeetings.map(m => 
               m.id === meeting.id ? { ...m, notified: true } : m
@@ -129,7 +122,6 @@ const Dashboard = () => {
       });
     };
     
-    // Check immediately and then every hour
     checkUpcomingMeetings();
     const interval = setInterval(checkUpcomingMeetings, 3600000);
     
@@ -183,7 +175,7 @@ const Dashboard = () => {
       title: meetingFormData.title,
       date: meetingFormData.date,
       time: meetingFormData.time,
-      attendees: participantsCount + 1, // +1 for the organizer
+      attendees: participantsCount + 1,
       notified: false
     };
     
@@ -242,7 +234,6 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Mobile sidebar toggle */}
       <div className="lg:hidden fixed top-4 left-4 z-50">
         <Button 
           variant="ghost" 
@@ -254,7 +245,6 @@ const Dashboard = () => {
         </Button>
       </div>
 
-      {/* Sidebar */}
       <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-0 bg-indigo-900 text-white shadow-md w-44 transition-transform duration-300 ease-in-out z-40 lg:z-auto`}>
         <div className="p-2 border-b border-indigo-700 flex items-center justify-center">
           <LogoImage size="sm" />
@@ -282,11 +272,11 @@ const Dashboard = () => {
             </li>
             <li>
               <button 
-                onClick={() => setActiveTab('pastMeetings')} 
-                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'pastMeetings' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
+                onClick={() => setActiveTab('digitalCalendar')} 
+                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'digitalCalendar' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
               >
-                <History className="w-4 h-4" />
-                <span className="text-sm">Past Meetings</span>
+                <CalendarDays className="w-4 h-4" />
+                <span className="text-sm">Digital Calendar</span>
               </button>
             </li>
             <li>
@@ -361,14 +351,13 @@ const Dashboard = () => {
         </nav>
       </div>
 
-      {/* Main content */}
       <div className="flex-1">
         <header className="bg-white shadow-sm sticky top-0 z-30">
           <div className="container mx-auto px-4 py-2 flex justify-between items-center">
             <h1 className="text-lg font-bold text-indigo-900">
               {activeTab === 'overview' && 'Dashboard Overview'}
               {activeTab === 'meetings' && 'My Meetings'}
-              {activeTab === 'pastMeetings' && 'Past Meetings'}
+              {activeTab === 'digitalCalendar' && 'Digital Calendar'}
               {activeTab === 'schedule' && 'Schedule'}
               {activeTab === 'team' && 'Team Members'}
               {activeTab === 'videos' && 'Video Meeting'}
@@ -377,7 +366,6 @@ const Dashboard = () => {
               {activeTab === 'settings' && 'Settings'}
             </h1>
             <div className="flex gap-2 items-center">
-              {/* Notification icon */}
               <Button 
                 variant="ghost" 
                 size="icon"
@@ -392,14 +380,12 @@ const Dashboard = () => {
                 <Bell className="h-5 w-5" />
               </Button>
               
-              {/* User profile */}
               <UserProfile />
             </div>
           </div>
         </header>
 
         <main className="container mx-auto px-4 py-4">
-          {/* Overview Tab */}
           {activeTab === 'overview' && (
             <div>
               <div className="bg-white rounded-xl shadow-md p-4 mb-4">
@@ -584,7 +570,6 @@ const Dashboard = () => {
             </div>
           )}
 
-          {/* Meetings Tab */}
           {activeTab === 'meetings' && (
             <div className="bg-white rounded-xl shadow-md p-4">
               <div className="flex justify-between items-center mb-4">
@@ -656,40 +641,25 @@ const Dashboard = () => {
             </div>
           )}
           
-          {/* Past Meetings Tab */}
-          {activeTab === 'pastMeetings' && (
-            <div>
-              <div className="bg-white rounded-xl shadow-md p-4 mb-4">
-                <h2 className="text-xl font-bold mb-4 text-indigo-900">Past Meetings</h2>
-                <div className="space-y-4">
-                  <PastMeetingVideo />
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {previousMeetingNotes.map(note => (
-                      <div key={note.id} className="border rounded-lg overflow-hidden bg-white shadow-sm">
-                        <div className="border-b p-3">
-                          <h3 className="font-medium">{note.title}</h3>
-                          <p className="text-sm text-gray-500">{note.date}</p>
-                        </div>
-                        <div className="p-3">
-                          <p className="text-sm text-gray-600 mb-2">{note.summary}</p>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            className="w-full text-indigo-600"
-                            onClick={() => setActiveTab('ai')}
-                          >
-                            View AI Notes
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+          {activeTab === 'digitalCalendar' && (
+            <div className="bg-white rounded-xl shadow-md p-4">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold text-indigo-900">Digital Calendar</h2>
+                <Button
+                  variant="outline"
+                  onClick={() => toast({
+                    title: "Calendar Sync",
+                    description: "Your calendar is synced with your email"
+                  })}
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  Sync Email Reminders
+                </Button>
               </div>
+              <DigitalCalendar />
             </div>
           )}
 
-          {/* Schedule Tab */}
           {activeTab === 'schedule' && (
             <div>
               <div className="bg-white rounded-xl shadow-md p-4 mb-4">
@@ -699,14 +669,12 @@ const Dashboard = () => {
             </div>
           )}
 
-          {/* Team Tab */}
           {activeTab === 'team' && (
             <div className="bg-white rounded-xl shadow-md p-4">
               <TeamMembers />
             </div>
           )}
           
-          {/* Video Meeting Tab */}
           {activeTab === 'videos' && (
             <div>
               <div className="mb-4">
@@ -715,7 +683,6 @@ const Dashboard = () => {
             </div>
           )}
           
-          {/* AI Notes Tab */}
           {activeTab === 'ai' && (
             <div>
               <div className="bg-white rounded-xl shadow-md p-4 mb-4">
@@ -768,7 +735,7 @@ const Dashboard = () => {
                           <Button 
                             variant="outline" 
                             size="sm"
-                            className="text-indigo-600"
+                            className="w-full text-indigo-600"
                           >
                             View Full Transcript
                           </Button>
@@ -808,7 +775,6 @@ const Dashboard = () => {
             </div>
           )}
           
-          {/* Reminders Tab */}
           {activeTab === 'reminders' && (
             <div>
               <div className="bg-white rounded-xl shadow-md p-4 mb-4">
@@ -818,7 +784,6 @@ const Dashboard = () => {
             </div>
           )}
 
-          {/* Settings Tab */}
           {activeTab === 'settings' && (
             <div className="bg-white rounded-xl shadow-md p-4">
               <h2 className="text-xl font-bold mb-4 text-indigo-900">Account Settings</h2>
@@ -891,7 +856,6 @@ const Dashboard = () => {
             </div>
           )}
 
-          {/* New Meeting Form */}
           {showNewMeetingForm && (
             <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-4 max-h-[90vh] overflow-y-auto">
