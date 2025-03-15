@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Users, Bell, ArrowLeft, ArrowRight, Plus, Trash2, Edit, Check, X, Calendar as CalendarIcon, ChevronDown, BellRing, Clock1, Repeat, Globe, Check as CheckIcon, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { toast } from '@/hooks/use-toast';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { format, addDays, addMinutes, parseISO, isToday, isTomorrow } from 'date-fns';
@@ -1390,3 +1389,4 @@ export const FullCalendar: React.FC = () => {
     </div>
   );
 };
+
