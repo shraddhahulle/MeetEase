@@ -31,15 +31,20 @@ export const exportMeetingToPDF = (meeting: Meeting): void => {
     format: 'a4',
   });
 
-  // Add title
+  // Add title with vibrant styling
   doc.setFontSize(22);
-  doc.setTextColor(59, 130, 246); // Blue color
+  doc.setTextColor(89, 60, 246); // Indigo color
   doc.text('Meeting Details', 105, 20, { align: 'center' });
   
   // Add logo or branding
   doc.setFontSize(14);
   doc.setTextColor(107, 114, 128); // Gray color
   doc.text('MeetEase', 105, 30, { align: 'center' });
+  
+  // Add a gradient-like horizontal line
+  doc.setDrawColor(89, 60, 246); // Indigo
+  doc.setLineWidth(0.5);
+  doc.line(20, 35, 190, 35);
   
   // Add meeting title
   doc.setFontSize(18);
@@ -65,26 +70,38 @@ export const exportMeetingToPDF = (meeting: Meeting): void => {
     doc.text(`Recurring: ${meeting.recurringPattern}`, 20, 76);
   }
   
+  // Add reminder information
+  const yPosAfterBasicInfo = meeting.isRecurring ? 83 : 76;
+  doc.setFontSize(14);
+  doc.setTextColor(89, 60, 246); // Indigo color
+  doc.text('Reminders', 20, yPosAfterBasicInfo);
+  
+  doc.setFontSize(12);
+  doc.setTextColor(75, 85, 99);
+  doc.text('• Email reminder: 2 days before meeting', 25, yPosAfterBasicInfo + 7);
+  doc.text('• In-app notification: Day of meeting', 25, yPosAfterBasicInfo + 14);
+  
   // Add description
   if (meeting.description && meeting.description.length > 0) {
+    const yPos = yPosAfterBasicInfo + 24;
     doc.setFontSize(14);
-    doc.setTextColor(0, 0, 0);
-    doc.text('Description', 20, 90);
+    doc.setTextColor(89, 60, 246); // Indigo color
+    doc.text('Description', 20, yPos);
     
     doc.setFontSize(12);
     doc.setTextColor(75, 85, 99);
     
     // Break long description into multiple lines if needed
     const splitDescription = doc.splitTextToSize(meeting.description, 170);
-    doc.text(splitDescription, 20, 97);
+    doc.text(splitDescription, 20, yPos + 7);
   }
   
   // Add participants if available
   if (meeting.participants && meeting.participants.length > 0) {
-    const yPos = meeting.description ? 120 : 90;
+    const yPos = (meeting.description ? yPosAfterBasicInfo + 50 : yPosAfterBasicInfo + 24);
     
     doc.setFontSize(14);
-    doc.setTextColor(0, 0, 0);
+    doc.setTextColor(89, 60, 246); // Indigo color
     doc.text('Participants', 20, yPos);
     
     doc.setFontSize(12);
@@ -97,12 +114,12 @@ export const exportMeetingToPDF = (meeting: Meeting): void => {
   
   // Add notes if available
   if (meeting.notes && meeting.notes.length > 0) {
-    const yPos = (meeting.participants && meeting.participants.length > 0) 
-      ? 120 + (meeting.participants.length * 7) 
-      : (meeting.description ? 130 : 90);
+    const participantsOffset = meeting.participants ? meeting.participants.length * 7 + 15 : 0;
+    const descriptionOffset = meeting.description ? 50 : 24;
+    const yPos = yPosAfterBasicInfo + descriptionOffset + participantsOffset;
     
     doc.setFontSize(14);
-    doc.setTextColor(0, 0, 0);
+    doc.setTextColor(89, 60, 246); // Indigo color
     doc.text('Notes', 20, yPos);
     
     doc.setFontSize(12);
@@ -113,22 +130,10 @@ export const exportMeetingToPDF = (meeting: Meeting): void => {
     });
   }
   
-  // Add reminder information
-  if (meeting.reminders && meeting.reminders.length > 0) {
-    const yPos = 170;
-    
-    doc.setFontSize(14);
-    doc.setTextColor(0, 0, 0);
-    doc.text('Reminders', 20, yPos);
-    
-    doc.setFontSize(12);
-    doc.setTextColor(75, 85, 99);
-    
-    meeting.reminders.forEach((reminder, index) => {
-      const formattedTime = format(reminder.time, 'MMM dd, yyyy - h:mm a');
-      doc.text(`• ${reminder.type}: ${formattedTime}`, 25, yPos + 7 + (index * 7));
-    });
-  }
+  // Add a decorative element at the bottom
+  doc.setDrawColor(89, 60, 246); // Indigo
+  doc.setLineWidth(0.5);
+  doc.line(20, 270, 190, 270);
   
   // Add footer
   doc.setFontSize(10);
@@ -149,9 +154,9 @@ export const exportMeetingsToPDF = (meetings: Meeting[]): void => {
     format: 'a4',
   });
 
-  // Add title
+  // Add title with vibrant styling
   doc.setFontSize(22);
-  doc.setTextColor(59, 130, 246); // Blue color
+  doc.setTextColor(89, 60, 246); // Indigo color
   doc.text('Meeting Schedule', 105, 20, { align: 'center' });
   
   // Add logo or branding
@@ -159,38 +164,103 @@ export const exportMeetingsToPDF = (meetings: Meeting[]): void => {
   doc.setTextColor(107, 114, 128); // Gray color
   doc.text('MeetEase', 105, 30, { align: 'center' });
   
+  // Add a decorative element
+  doc.setDrawColor(89, 60, 246); // Indigo
+  doc.setLineWidth(0.5);
+  doc.line(20, 35, 190, 35);
+  
+  // Remove past meetings
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  // Only include upcoming meetings
+  const upcomingMeetings = meetings.filter(meeting => 
+    meeting.startTime.getTime() >= today.getTime()
+  );
+  
   // Sort meetings by date
-  const sortedMeetings = [...meetings].sort((a, b) => 
+  const sortedMeetings = [...upcomingMeetings].sort((a, b) => 
     a.startTime.getTime() - b.startTime.getTime()
   );
   
-  // Create table data
-  const tableData = sortedMeetings.map(meeting => [
-    format(meeting.startTime, 'MMM dd, yyyy'),
-    format(meeting.startTime, 'h:mm a') + ' - ' + format(meeting.endTime, 'h:mm a'),
-    meeting.title,
-    meeting.location || '',
-    meeting.isRecurring ? 'Yes' : 'No'
-  ]);
+  if (sortedMeetings.length === 0) {
+    doc.setFontSize(14);
+    doc.setTextColor(75, 85, 99);
+    doc.text('No upcoming meetings scheduled.', 105, 50, { align: 'center' });
+  } else {
+    // Create table data
+    const tableData = sortedMeetings.map(meeting => [
+      format(meeting.startTime, 'MMM dd, yyyy'),
+      format(meeting.startTime, 'h:mm a') + ' - ' + format(meeting.endTime, 'h:mm a'),
+      meeting.title,
+      meeting.location || '',
+      meeting.isRecurring ? 'Yes' : 'No'
+    ]);
+    
+    // @ts-ignore - jspdf-autotable extends jsPDF
+    doc.autoTable({
+      startY: 40,
+      head: [['Date', 'Time', 'Title', 'Location', 'Recurring']],
+      body: tableData,
+      theme: 'grid',
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [89, 60, 246], textColor: [255, 255, 255] },
+      alternateRowStyles: { fillColor: [240, 240, 255] },
+    });
+    
+    // Add a section header for meeting details
+    let yPos = (doc as any).lastAutoTable.finalY + 15;
+    
+    doc.setFontSize(16);
+    doc.setTextColor(89, 60, 246);
+    doc.text('Upcoming Meeting Details', 105, yPos, { align: 'center' });
+    
+    // Add detailed information for each meeting
+    sortedMeetings.slice(0, 3).forEach((meeting, index) => {
+      yPos += 15;
+      
+      // Add a subtle background for each meeting
+      doc.setFillColor(245, 245, 255);
+      doc.roundedRect(20, yPos - 5, 170, 25, 2, 2, 'F');
+      
+      doc.setFontSize(14);
+      doc.setTextColor(0, 0, 0);
+      doc.text(`${index + 1}. ${meeting.title}`, 25, yPos);
+      
+      doc.setFontSize(10);
+      doc.setTextColor(75, 85, 99);
+      doc.text(`Date: ${format(meeting.startTime, 'MMMM dd, yyyy')}`, 30, yPos + 7);
+      doc.text(`Time: ${format(meeting.startTime, 'h:mm a')} - ${format(meeting.endTime, 'h:mm a')}`, 30, yPos + 12);
+      
+      if (meeting.description) {
+        const truncatedDesc = meeting.description.length > 70 
+          ? meeting.description.substring(0, 70) + '...' 
+          : meeting.description;
+        doc.text(`Note: ${truncatedDesc}`, 30, yPos + 17);
+      }
+      
+      yPos += 25;
+    });
+  }
   
-  // @ts-ignore - jspdf-autotable extends jsPDF
-  doc.autoTable({
-    startY: 40,
-    head: [['Date', 'Time', 'Title', 'Location', 'Recurring']],
-    body: tableData,
-    theme: 'grid',
-    styles: { fontSize: 10 },
-    headStyles: { fillColor: [59, 130, 246] },
-    alternateRowStyles: { fillColor: [240, 245, 255] },
-  });
+  // Add a decorative element at the bottom
+  doc.setDrawColor(89, 60, 246); // Indigo
+  doc.setLineWidth(0.5);
+  doc.line(20, 270, 190, 270);
   
   // Add footer
   doc.setFontSize(10);
   doc.setTextColor(107, 114, 128);
   doc.text('Generated by MeetEase Calendar', 105, 280, { align: 'center' });
   doc.text(`Generated on: ${format(new Date(), 'MMMM dd, yyyy')}`, 105, 285, { align: 'center' });
+  doc.text('Past meetings are automatically removed', 105, 290, { align: 'center' });
   
   // Download the PDF
   doc.save(`meetings-schedule-${format(new Date(), 'yyyy-MM-dd')}.pdf`);
 };
 
+// Remove past meetings utility function
+export const cleanupPastMeetings = (meetings: Meeting[]): Meeting[] => {
+  const now = new Date();
+  return meetings.filter(meeting => meeting.endTime >= now);
+};
