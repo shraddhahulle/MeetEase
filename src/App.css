@@ -1,3 +1,4 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -12,10 +13,10 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em rgba(252, 82, 151, 0.8));
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 2em rgba(0, 210, 255, 0.8));
 }
 
 @keyframes logo-spin {
@@ -35,8 +36,62 @@
 
 .card {
   padding: 2em;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(113, 47, 255, 0.15);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 36px rgba(113, 47, 255, 0.25);
 }
 
 .read-the-docs {
   color: #888;
+}
+
+/* Vibrant gradient buttons */
+.gradient-button {
+  background: linear-gradient(45deg, #FC5297, #0D2FFF);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.gradient-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(252, 82, 151, 0.3);
+}
+
+/* Vibrant backgrounds and accents */
+.vibrant-bg {
+  background: linear-gradient(120deg, #00D2FF, #FC5297);
+}
+
+.vibrant-text {
+  background: linear-gradient(90deg, #FC5297, #0D2FFF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+
+/* Enhanced animations */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pulse-animation {
+  animation: pulse 2s infinite ease-in-out;
 }
