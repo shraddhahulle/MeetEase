@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CalendarIcon, FileText, Share2 } from 'lucide-react';
+import { CalendarIcon, FileText, Share2, Sun, Moon } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { toast } from '@/hooks/use-toast';
 
@@ -19,6 +19,13 @@ import {
   isDayWithNote as checkDayWithNote,
   getNotesForDate
 } from './meetingUtils';
+import { 
+  saveCalendarNotes, 
+  loadCalendarNotes, 
+  getUserTheme, 
+  saveUserTheme,
+  getUpcomingReminders
+} from '../../utils/calendarStorage';
 
 export const MeetingCalendar: React.FC = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -26,64 +33,126 @@ export const MeetingCalendar: React.FC = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<ViewMode>('calendar');
   const [timeZone, setTimeZone] = useState<string>(Intl.DateTimeFormat().resolvedOptions().timeZone);
+  const [theme, setTheme] = useState<'light' | 'dark'>(getUserTheme());
 
-  // Add some example notes for demonstration
+  // Load notes from localStorage on initial mount
   useEffect(() => {
-    const today = new Date();
-    const tomorrow = new Date();
-    tomorrow.setDate(today.getDate() + 1);
+    const savedNotes = loadCalendarNotes();
+    if (savedNotes.length > 0) {
+      setCalendarNotes(savedNotes);
+    } else {
+      // If no saved notes, add some example notes for demonstration
+      const today = new Date();
+      const tomorrow = new Date();
+      tomorrow.setDate(today.getDate() + 1);
+      
+      const nextWeek = new Date();
+      nextWeek.setDate(today.getDate() + 7);
+      
+      const initialNotes: CalendarNote[] = [
+        {
+          date: today,
+          note: "Weekly team sync meeting at 10:00 AM. Discuss Q2 roadmap priorities.",
+          title: "Team Sync",
+          startTime: "10:00",
+          endTime: "11:00",
+          participants: ["john@example.com", "sarah@example.com", "mike@example.com"],
+          location: "Conference Room A",
+          color: "indigo",
+          reminders: [
+            { time: new Date(today.getTime() - 24 * 60 * 60 * 1000), type: 'email' },
+            { time: new Date(today.getTime() - 3 * 60 * 1000), type: 'notification' }
+          ]
+        },
+        {
+          date: tomorrow,
+          note: "Follow up with Mike about the customer segmentation report.",
+          title: "Customer Report Review",
+          startTime: "14:00",
+          endTime: "15:00",
+          participants: ["mike@example.com"],
+          location: "Virtual - Zoom",
+          color: "purple",
+          reminders: [
+            { time: new Date(tomorrow.getTime() - 24 * 60 * 60 * 1000), type: 'email' }
+          ]
+        },
+        {
+          date: nextWeek,
+          note: "Marketing review meeting - Assess results of TikTok campaign.",
+          title: "Marketing Review",
+          startTime: "11:00",
+          endTime: "12:30",
+          participants: ["marketing@example.com", "social@example.com"],
+          location: "Conference Room B",
+          color: "green",
+          isRecurring: true,
+          recurringPattern: "weekly",
+          reminders: [
+            { time: new Date(nextWeek.getTime() - 24 * 60 * 60 * 1000), type: 'email' },
+            { time: new Date(nextWeek.getTime() - 30 * 60 * 1000), type: 'custom' }
+          ]
+        }
+      ];
+      
+      setCalendarNotes(initialNotes);
+      saveCalendarNotes(initialNotes);
+    }
+
+    // Set theme on body element
+    document.body.classList.toggle('dark', theme === 'dark');
     
-    const nextWeek = new Date();
-    nextWeek.setDate(today.getDate() + 7);
+    // Check for upcoming reminders
+    checkReminders();
     
-    const initialNotes: CalendarNote[] = [
-      {
-        date: today,
-        note: "Weekly team sync meeting at 10:00 AM. Discuss Q2 roadmap priorities.",
-        title: "Team Sync",
-        startTime: "10:00",
-        endTime: "11:00",
-        participants: ["john@example.com", "sarah@example.com", "mike@example.com"],
-        location: "Conference Room A",
-        color: "indigo",
-        reminders: [
-          { time: new Date(today.getTime() - 24 * 60 * 60 * 1000), type: 'email' },
-          { time: new Date(today.getTime() - 3 * 60 * 1000), type: 'notification' }
-        ]
-      },
-      {
-        date: tomorrow,
-        note: "Follow up with Mike about the customer segmentation report.",
-        title: "Customer Report Review",
-        startTime: "14:00",
-        endTime: "15:00",
-        participants: ["mike@example.com"],
-        location: "Virtual - Zoom",
-        color: "purple",
-        reminders: [
-          { time: new Date(tomorrow.getTime() - 24 * 60 * 60 * 1000), type: 'email' }
-        ]
-      },
-      {
-        date: nextWeek,
-        note: "Marketing review meeting - Assess results of TikTok campaign.",
-        title: "Marketing Review",
-        startTime: "11:00",
-        endTime: "12:30",
-        participants: ["marketing@example.com", "social@example.com"],
-        location: "Conference Room B",
-        color: "green",
-        isRecurring: true,
-        recurringPattern: "weekly",
-        reminders: [
-          { time: new Date(nextWeek.getTime() - 24 * 60 * 60 * 1000), type: 'email' },
-          { time: new Date(nextWeek.getTime() - 30 * 60 * 1000), type: 'custom' }
-        ]
-      }
-    ];
+    // Set interval to check reminders every hour
+    const reminderInterval = setInterval(checkReminders, 60 * 60 * 1000);
     
-    setCalendarNotes(initialNotes);
+    return () => {
+      clearInterval(reminderInterval);
+    };
   }, []);
+
+  // Save notes to localStorage whenever they change
+  useEffect(() => {
+    if (calendarNotes.length > 0) {
+      saveCalendarNotes(calendarNotes);
+    }
+  }, [calendarNotes]);
+
+  // Update document theme when theme state changes
+  useEffect(() => {
+    document.body.classList.toggle('dark', theme === 'dark');
+    saveUserTheme(theme);
+  }, [theme]);
+
+  // Function to check for upcoming reminders
+  const checkReminders = () => {
+    const upcomingMeetings = getUpcomingReminders();
+    
+    upcomingMeetings.forEach(meeting => {
+      const meetingTime = new Date(meeting.date);
+      const [hours, minutes] = (meeting.startTime || "00:00").split(':').map(Number);
+      meetingTime.setHours(hours, minutes);
+      
+      // Only show reminder if meeting is within the next 24 hours
+      const now = new Date();
+      const timeDiff = meetingTime.getTime() - now.getTime();
+      const hoursDiff = timeDiff / (1000 * 60 * 60);
+      
+      if (hoursDiff > 0 && hoursDiff <= 24) {
+        toast({
+          title: "Upcoming Meeting",
+          description: `${meeting.title} at ${meeting.startTime} ${hoursDiff < 1 ? 'in less than an hour' : 'today'}`,
+        });
+      }
+    });
+  };
+
+  // Toggle between light and dark mode
+  const toggleTheme = () => {
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+  };
 
   // Add a meeting note
   const addNote = (newNote: CalendarNote) => {
@@ -139,6 +208,36 @@ export const MeetingCalendar: React.FC = () => {
     setViewMode('calendar');
   };
 
+  // Sync with Google Calendar (simulated)
+  const syncWithGoogleCalendar = () => {
+    toast({
+      title: "Google Calendar",
+      description: "Syncing with Google Calendar...",
+    });
+    
+    setTimeout(() => {
+      toast({
+        title: "Success",
+        description: "Calendar synced with Google Calendar",
+      });
+    }, 1500);
+  };
+
+  // Sync with Outlook Calendar (simulated)
+  const syncWithOutlookCalendar = () => {
+    toast({
+      title: "Outlook Calendar",
+      description: "Syncing with Outlook Calendar...",
+    });
+    
+    setTimeout(() => {
+      toast({
+        title: "Success",
+        description: "Calendar synced with Outlook Calendar",
+      });
+    }, 1500);
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -147,7 +246,7 @@ export const MeetingCalendar: React.FC = () => {
           <Button 
             variant={viewMode === 'calendar' ? 'default' : 'outline'} 
             size="sm"
-            className={viewMode === 'calendar' ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white' : 'border-purple-200 text-purple-700 hover:bg-purple-50'}
+            className={viewMode === 'calendar' ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white' : 'border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-600 dark:text-purple-300 dark:hover:bg-purple-900/30'}
             onClick={() => setViewMode('calendar')}
           >
             Calendar
@@ -155,14 +254,22 @@ export const MeetingCalendar: React.FC = () => {
           <Button 
             variant={viewMode === 'list' ? 'default' : 'outline'} 
             size="sm"
-            className={viewMode === 'list' ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white' : 'border-purple-200 text-purple-700 hover:bg-purple-50'}
+            className={viewMode === 'list' ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white' : 'border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-600 dark:text-purple-300 dark:hover:bg-purple-900/30'}
             onClick={() => setViewMode('list')}
           >
             List View
           </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-600 dark:text-purple-300 dark:hover:bg-purple-900/30"
+            onClick={toggleTheme}
+          >
+            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+          </Button>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="border-purple-200 text-purple-700 hover:bg-purple-50">
+              <Button variant="outline" size="sm" className="border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-600 dark:text-purple-300 dark:hover:bg-purple-900/30">
                 <FileText size={16} className="mr-2" />
                 Export
               </Button>
@@ -171,7 +278,7 @@ export const MeetingCalendar: React.FC = () => {
               <div className="space-y-2">
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start text-purple-700 hover:bg-purple-50 hover:text-purple-800"
+                  className="w-full justify-start text-purple-700 hover:bg-purple-50 hover:text-purple-800 dark:text-purple-300 dark:hover:bg-purple-900/30 dark:hover:text-purple-200"
                   onClick={() => handleExportAllToPDF(calendarNotes)}
                 >
                   <FileText size={16} className="mr-2" />
@@ -179,40 +286,16 @@ export const MeetingCalendar: React.FC = () => {
                 </Button>
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start text-purple-700 hover:bg-purple-50 hover:text-purple-800"
-                  onClick={() => {
-                    toast({
-                      title: "Google Calendar",
-                      description: "Syncing with Google Calendar...",
-                    });
-                    
-                    setTimeout(() => {
-                      toast({
-                        title: "Success",
-                        description: "Calendar synced with Google Calendar",
-                      });
-                    }, 1500);
-                  }}
+                  className="w-full justify-start text-purple-700 hover:bg-purple-50 hover:text-purple-800 dark:text-purple-300 dark:hover:bg-purple-900/30 dark:hover:text-purple-200"
+                  onClick={syncWithGoogleCalendar}
                 >
                   <Share2 size={16} className="mr-2" />
                   Sync with Google
                 </Button>
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start text-purple-700 hover:bg-purple-50 hover:text-purple-800"
-                  onClick={() => {
-                    toast({
-                      title: "Outlook Calendar",
-                      description: "Syncing with Outlook Calendar...",
-                    });
-                    
-                    setTimeout(() => {
-                      toast({
-                        title: "Success",
-                        description: "Calendar synced with Outlook Calendar",
-                      });
-                    }, 1500);
-                  }}
+                  className="w-full justify-start text-purple-700 hover:bg-purple-50 hover:text-purple-800 dark:text-purple-300 dark:hover:bg-purple-900/30 dark:hover:text-purple-200"
+                  onClick={syncWithOutlookCalendar}
                 >
                   <Share2 size={16} className="mr-2" />
                   Sync with Outlook
@@ -236,8 +319,8 @@ export const MeetingCalendar: React.FC = () => {
           </div>
 
           <div className="md:col-span-2">
-            <Card className="border-purple-100 shadow-lg">
-              <CardHeader className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-t-lg">
+            <Card className="border-purple-100 shadow-lg dark:border-purple-800">
+              <CardHeader className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-t-lg">
                 <CardTitle className="text-lg">
                   {date ? format(date, 'EEEE, MMMM dd, yyyy') : "Select a Date"}
                 </CardTitle>

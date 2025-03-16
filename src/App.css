@@ -1,6 +1,6 @@
 
 #root {
-  max-width: 1280px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -13,10 +13,10 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em rgba(124, 58, 237, 0.8));
+  filter: drop-shadow(0 0 2em rgba(139, 92, 246, 0.8));
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em rgba(124, 58, 237, 0.8));
+  filter: drop-shadow(0 0 2em rgba(139, 92, 246, 0.8));
 }
 
 @keyframes logo-spin {
@@ -37,14 +37,14 @@
 .card {
   padding: 2em;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
   transition: all 0.3s ease;
 }
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 36px rgba(124, 58, 237, 0.25);
+  box-shadow: 0 12px 36px rgba(139, 92, 246, 0.25);
 }
 
 .read-the-docs {
@@ -64,7 +64,7 @@
 
 .gradient-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 15px rgba(124, 58, 237, 0.3);
+  box-shadow: 0 8px 15px rgba(139, 92, 246, 0.3);
 }
 
 /* Vibrant backgrounds and accents */
@@ -96,9 +96,9 @@
   animation: pulse 2s infinite ease-in-out;
 }
 
-/* Premium calendar styling */
+/* Premium calendar styling - enhanced */
 .premium-calendar .rdp-day_selected {
-  @apply bg-gradient-to-r from-purple-500 to-indigo-600 text-white;
+  @apply bg-gradient-to-r from-purple-600 to-indigo-600 text-white;
 }
 
 .premium-calendar .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
@@ -106,7 +106,7 @@
 }
 
 .meeting-card {
-  @apply bg-gradient-to-br from-white to-white/90 shadow-lg border border-purple-100 rounded-xl transition-all;
+  @apply bg-white shadow-lg border border-purple-100 rounded-xl transition-all dark:bg-gray-800 dark:border-purple-800;
 }
 
 .meeting-card:hover {
@@ -119,19 +119,47 @@
 
 /* Button styling */
 .premium-button {
-  @apply bg-gradient-to-r from-purple-500 to-indigo-600 text-white transition-all;
+  @apply bg-gradient-to-r from-purple-600 to-indigo-600 text-white transition-all;
 }
 
 .premium-button:hover {
-  @apply from-purple-600 to-indigo-700 shadow-md shadow-purple-500/20;
+  @apply from-purple-700 to-indigo-700 shadow-md shadow-purple-500/20;
 }
 
 /* Card styling */
 .premium-card {
-  @apply border-purple-100 shadow-lg rounded-xl overflow-hidden;
+  @apply border-purple-100 shadow-lg rounded-xl overflow-hidden dark:border-purple-800 dark:bg-gray-800;
 }
 
 /* Form controls */
 .premium-control {
   @apply border-purple-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-300 rounded-lg;
+}
+
+/* Dark mode overrides */
+.dark .premium-card {
+  @apply bg-gray-800 border-purple-800;
+}
+
+.dark .premium-calendar .rdp-day_selected {
+  @apply bg-gradient-to-r from-purple-500 to-indigo-500 text-white;
+}
+
+.dark .premium-calendar .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+  @apply bg-purple-900 text-purple-200;
+}
+
+.dark .premium-input {
+  @apply border-purple-700 bg-gray-700 text-white;
+}
+
+/* Wide calendar styling */
+.calendar-container {
+  width: 100%;
+  min-width: 320px;
+}
+
+.premium-calendar {
+  width: 100%;
+  max-width: none !important;
 }

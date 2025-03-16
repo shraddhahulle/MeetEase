@@ -38,6 +38,36 @@
     --radius: 0.75rem;
   }
 
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 260 80% 56%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+  }
+
   * {
     @apply border-border selection:bg-accent/20;
   }
@@ -72,11 +102,11 @@
 
 @layer components {
   .glass-card {
-    @apply backdrop-blur-md bg-white/90 border border-white/30 shadow-subtle;
+    @apply backdrop-blur-md bg-white/90 border border-white/30 shadow-subtle dark:bg-black/40 dark:border-white/10;
   }
 
   .premium-card {
-    @apply backdrop-blur-xl bg-white/80 border border-white/20 shadow-card rounded-2xl;
+    @apply backdrop-blur-xl bg-white/95 border border-purple-100 shadow-lg rounded-2xl dark:bg-gray-800/95 dark:border-purple-800/50;
   }
 
   .text-balance {
@@ -84,7 +114,7 @@
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-meetease-blue to-meetease-indigo;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600;
   }
 
   .hover-scale {
@@ -108,7 +138,7 @@
 .logo-animation {
   position: absolute;
   border-radius: 50%;
-  background-color: rgba(94, 92, 230, 0.1);
+  background-color: rgba(139, 92, 246, 0.2);
   animation: logo-pulse 1.5s ease-out infinite;
 }
 
@@ -125,7 +155,7 @@
 
 /* Modern button effect */
 .modern-button {
-  @apply px-6 py-3 text-white rounded-full font-medium transition-all duration-300 bg-meetease-blue hover:shadow-[0_6px_20px_rgba(94,92,230,0.4)] active:translate-y-[2px];
+  @apply px-6 py-3 text-white rounded-full font-medium transition-all duration-300 bg-gradient-to-r from-purple-600 to-indigo-600 hover:shadow-[0_6px_20px_rgba(139,92,246,0.4)] active:translate-y-[2px];
 }
 
 .floating-card {
@@ -172,7 +202,7 @@
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(94, 92, 230, 0.4) 0%, rgba(94, 92, 230, 0) 70%);
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, rgba(139, 92, 246, 0) 70%);
   filter: blur(30px);
   animation: pulse 4s ease-in-out infinite alternate;
 }
@@ -190,15 +220,15 @@
 
 /* Premium calendar styling */
 .premium-calendar .rdp-day_selected {
-  @apply bg-gradient-to-r from-meetease-blue to-meetease-indigo text-white;
+  @apply bg-gradient-to-r from-purple-600 to-indigo-600 text-white;
 }
 
 .premium-calendar .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
-  @apply bg-meetease-blue/10;
+  @apply bg-purple-100 dark:bg-purple-900;
 }
 
 .meeting-card {
-  @apply bg-gradient-to-br from-white to-white/90 shadow-lg border border-meetease-gray4/30 rounded-xl transition-all;
+  @apply bg-gradient-to-br from-white to-white/90 shadow-lg border border-purple-100 rounded-xl transition-all dark:from-gray-800 dark:to-gray-900 dark:border-purple-900/30;
 }
 
 .meeting-card:hover {
@@ -206,5 +236,35 @@
 }
 
 .premium-input {
-  @apply border-meetease-gray4 focus:border-meetease-blue focus:ring-1 focus:ring-meetease-blue/20;
+  @apply border-purple-200 focus:border-purple-600 focus:ring-1 focus:ring-purple-600/20 dark:border-purple-700 dark:bg-gray-800 dark:text-white;
+}
+
+/* Calendar table enlargement */
+.premium-calendar table {
+  width: 100%;
+}
+
+.premium-calendar .rdp-caption {
+  padding: 10px 0;
+}
+
+.premium-calendar .rdp-head_row {
+  justify-content: space-between;
+  width: 100%;
+}
+
+.premium-calendar .rdp-row {
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Wider calendar days */
+.premium-calendar .rdp-cell,
+.premium-calendar .rdp-head_cell {
+  width: 14.28%;
+  min-width: 40px;
+}
+
+.rdp-month {
+  width: 100%;
 }
