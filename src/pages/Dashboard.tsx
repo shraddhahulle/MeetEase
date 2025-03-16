@@ -244,17 +244,17 @@ const Dashboard = () => {
         </Button>
       </div>
 
-      <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-0 bg-indigo-900 text-white shadow-md w-44 transition-transform duration-300 ease-in-out z-40 lg:z-auto`}>
-        <div className="p-2 border-b border-indigo-700 flex items-center justify-center">
-          <LogoImage size="sm" />
+      <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-0 bg-gradient-to-b from-purple-800 via-indigo-800 to-indigo-900 text-white shadow-xl w-48 transition-transform duration-300 ease-in-out z-40 lg:z-auto`}>
+        <div className="p-3 border-b border-purple-700 flex items-center justify-center">
+          <LogoImage size="sm" className="filter hue-rotate-15 brightness-110" />
         </div>
         
-        <nav className="p-1">
-          <ul className="space-y-0.5">
+        <nav className="p-2">
+          <ul className="space-y-1">
             <li>
               <button 
                 onClick={() => setActiveTab('overview')} 
-                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'overview' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
+                className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'overview' ? 'bg-white/20 shadow-inner' : 'hover:bg-white/10'}`}
               >
                 <Calendar className="w-4 h-4" />
                 <span className="text-sm">Overview</span>
@@ -263,7 +263,7 @@ const Dashboard = () => {
             <li>
               <button 
                 onClick={() => setActiveTab('meetings')} 
-                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'meetings' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
+                className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'meetings' ? 'bg-white/20 shadow-inner' : 'hover:bg-white/10'}`}
               >
                 <Clock className="w-4 h-4" />
                 <span className="text-sm">My Meetings</span>
@@ -272,7 +272,7 @@ const Dashboard = () => {
             <li>
               <button 
                 onClick={() => setActiveTab('digitalCalendar')} 
-                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'digitalCalendar' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
+                className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'digitalCalendar' ? 'bg-white/20 shadow-inner' : 'hover:bg-white/10'}`}
               >
                 <CalendarDays className="w-4 h-4" />
                 <span className="text-sm">Digital Calendar</span>
@@ -280,17 +280,8 @@ const Dashboard = () => {
             </li>
             <li>
               <button 
-                onClick={() => setActiveTab('schedule')} 
-                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'schedule' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
-              >
-                <CalendarDays className="w-4 h-4" />
-                <span className="text-sm">Schedule</span>
-              </button>
-            </li>
-            <li>
-              <button 
                 onClick={() => setActiveTab('team')} 
-                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'team' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
+                className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'team' ? 'bg-white/20 shadow-inner' : 'hover:bg-white/10'}`}
               >
                 <Users className="w-4 h-4" />
                 <span className="text-sm">Team</span>
@@ -299,7 +290,7 @@ const Dashboard = () => {
             <li>
               <button 
                 onClick={() => setActiveTab('videos')} 
-                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'videos' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
+                className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'videos' ? 'bg-white/20 shadow-inner' : 'hover:bg-white/10'}`}
               >
                 <VideoIcon className="w-4 h-4" />
                 <span className="text-sm">Video Meeting</span>
@@ -308,7 +299,7 @@ const Dashboard = () => {
             <li>
               <button 
                 onClick={() => setActiveTab('ai')} 
-                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'ai' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
+                className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'ai' ? 'bg-white/20 shadow-inner' : 'hover:bg-white/10'}`}
               >
                 <MessageSquare className="w-4 h-4" />
                 <span className="text-sm">AI Notes</span>
@@ -317,7 +308,7 @@ const Dashboard = () => {
             <li>
               <button 
                 onClick={() => setActiveTab('reminders')} 
-                className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'reminders' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
+                className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'reminders' ? 'bg-white/20 shadow-inner' : 'hover:bg-white/10'}`}
               >
                 <BellRing className="w-4 h-4" />
                 <span className="text-sm">Reminders</span>
@@ -325,12 +316,12 @@ const Dashboard = () => {
             </li>
           </ul>
           
-          <div className="mt-3 pt-3 border-t border-indigo-700">
-            <ul className="space-y-0.5">
+          <div className="mt-3 pt-3 border-t border-purple-700">
+            <ul className="space-y-1">
               <li>
                 <button 
                   onClick={() => setActiveTab('settings')} 
-                  className={`w-full text-left p-1.5 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'settings' ? 'bg-indigo-700' : 'hover:bg-indigo-800'}`}
+                  className={`w-full text-left p-2 rounded-lg flex items-center gap-2 transition-colors ${activeTab === 'settings' ? 'bg-white/20 shadow-inner' : 'hover:bg-white/10'}`}
                 >
                   <Settings className="w-4 h-4" />
                   <span className="text-sm">Settings</span>
@@ -339,7 +330,7 @@ const Dashboard = () => {
               <li>
                 <button 
                   onClick={handleLogout} 
-                  className="w-full text-left p-1.5 rounded-lg flex items-center gap-2 text-red-300 hover:bg-red-900/30 transition-colors"
+                  className="w-full text-left p-2 rounded-lg flex items-center gap-2 text-red-300 hover:bg-red-900/30 transition-colors"
                 >
                   <LogOut className="w-4 h-4" />
                   <span className="text-sm">Logout</span>
@@ -353,11 +344,10 @@ const Dashboard = () => {
       <div className="flex-1">
         <header className="bg-white shadow-sm sticky top-0 z-30">
           <div className="container mx-auto px-4 py-2 flex justify-between items-center">
-            <h1 className="text-lg font-bold text-indigo-900">
+            <h1 className="text-lg font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
               {activeTab === 'overview' && 'Dashboard Overview'}
               {activeTab === 'meetings' && 'My Meetings'}
               {activeTab === 'digitalCalendar' && 'Digital Calendar'}
-              {activeTab === 'schedule' && 'Schedule'}
               {activeTab === 'team' && 'Team Members'}
               {activeTab === 'videos' && 'Video Meeting'}
               {activeTab === 'ai' && 'AI Meeting Notes'}
@@ -368,7 +358,7 @@ const Dashboard = () => {
               <Button 
                 variant="ghost" 
                 size="icon"
-                className="text-indigo-600"
+                className="text-purple-600"
                 onClick={() => {
                   toast({
                     title: "Notifications",
@@ -572,7 +562,7 @@ const Dashboard = () => {
           {activeTab === 'meetings' && (
             <div className="bg-white rounded-xl shadow-md p-4">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-indigo-900">My Meetings</h2>
+                <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">My Meetings</h2>
                 <GradientButton onClick={handleNewMeeting} size="sm">
                   <Plus className="w-4 h-4 mr-2" />
                   New Meeting
@@ -582,7 +572,7 @@ const Dashboard = () => {
               {meetings.length > 0 ? (
                 <div className="space-y-3">
                   {meetings.map((meeting) => (
-                    <div key={meeting.id} className="border rounded-lg p-3 hover:shadow-md transition-shadow">
+                    <div key={meeting.id} className="border border-purple-100 rounded-lg p-3 hover:shadow-md transition-shadow">
                       <div className="flex justify-between items-start">
                         <div>
                           <h3 className="font-semibold text-lg">{meeting.title}</h3>
@@ -599,6 +589,7 @@ const Dashboard = () => {
                           <Button 
                             variant="outline"
                             size="sm"
+                            className="border-purple-200 text-purple-700 hover:bg-purple-50"
                             onClick={() => {
                               toast({
                                 title: "Edit Meeting",
@@ -628,7 +619,7 @@ const Dashboard = () => {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <Calendar className="w-16 h-16 text-purple-300 mx-auto mb-4" />
                   <h3 className="text-xl font-medium mb-2">No meetings yet</h3>
                   <p className="text-gray-500 mb-4">Schedule your first meeting to get started</p>
                   <GradientButton onClick={handleNewMeeting}>
@@ -643,9 +634,10 @@ const Dashboard = () => {
           {activeTab === 'digitalCalendar' && (
             <div className="bg-white rounded-xl shadow-md p-4">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-indigo-900">Digital Calendar</h2>
+                <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Digital Calendar</h2>
                 <Button
                   variant="outline"
+                  className="border-purple-200 text-purple-700 hover:bg-purple-50"
                   onClick={() => toast({
                     title: "Calendar Sync",
                     description: "Your calendar is synced with your email"
@@ -849,7 +841,7 @@ const Dashboard = () => {
           {showNewMeetingForm && (
             <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-4 max-h-[90vh] overflow-y-auto">
-                <h3 className="text-xl font-bold mb-3 text-indigo-900">Schedule New Meeting</h3>
+                <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Schedule New Meeting</h3>
                 
                 <div className="space-y-3 mb-4">
                   <div>
@@ -859,7 +851,7 @@ const Dashboard = () => {
                       name="title"
                       value={meetingFormData.title}
                       onChange={handleInputChange}
-                      className="w-full p-2 border rounded-md" 
+                      className="w-full p-2 border border-purple-200 rounded-md focus:ring-2 focus:ring-purple-300 focus:border-purple-300 outline-none" 
                       placeholder="Enter meeting title" 
                     />
                   </div>
@@ -872,7 +864,7 @@ const Dashboard = () => {
                         name="date"
                         value={meetingFormData.date}
                         onChange={handleInputChange}
-                        className="w-full p-2 border rounded-md" 
+                        className="w-full p-2 border border-purple-200 rounded-md focus:ring-2 focus:ring-purple-300 focus:border-purple-300 outline-none" 
                       />
                     </div>
                     <div>
@@ -882,7 +874,7 @@ const Dashboard = () => {
                         name="time"
                         value={meetingFormData.time}
                         onChange={handleInputChange}
-                        className="w-full p-2 border rounded-md" 
+                        className="w-full p-2 border border-purple-200 rounded-md focus:ring-2 focus:ring-purple-300 focus:border-purple-300 outline-none" 
                       />
                     </div>
                   </div>
@@ -893,7 +885,7 @@ const Dashboard = () => {
                       name="participants"
                       value={meetingFormData.participants}
                       onChange={handleInputChange}
-                      className="w-full p-2 border rounded-md" 
+                      className="w-full p-2 border border-purple-200 rounded-md focus:ring-2 focus:ring-purple-300 focus:border-purple-300 outline-none" 
                       rows={3} 
                       placeholder="Enter email addresses separated by commas" 
                     />
@@ -905,7 +897,7 @@ const Dashboard = () => {
                       name="description"
                       value={meetingFormData.description}
                       onChange={handleInputChange}
-                      className="w-full p-2 border rounded-md" 
+                      className="w-full p-2 border border-purple-200 rounded-md focus:ring-2 focus:ring-purple-300 focus:border-purple-300 outline-none" 
                       rows={3} 
                       placeholder="Enter meeting description" 
                     />
@@ -915,13 +907,14 @@ const Dashboard = () => {
                 <div className="flex justify-end gap-2">
                   <Button 
                     variant="outline" 
+                    className="border-purple-200"
                     onClick={() => setShowNewMeetingForm(false)}
                   >
                     Cancel
                   </Button>
                   <GradientButton 
                     onClick={handleCreateMeeting}
-                    className="bg-indigo-600 hover:bg-indigo-700"
+                    className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700"
                   >
                     Schedule Meeting
                   </GradientButton>

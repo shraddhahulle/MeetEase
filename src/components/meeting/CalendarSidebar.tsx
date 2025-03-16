@@ -23,19 +23,20 @@ const CalendarSidebar: React.FC<CalendarSidebarProps> = ({
   isDayWithNote
 }) => {
   return (
-    <Card>
-      <CardHeader>
+    <Card className="w-full shadow-lg border-purple-100">
+      <CardHeader className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-t-lg">
         <CardTitle className="text-lg flex items-center">
           <CalendarIcon className="h-5 w-5 mr-2" />
           Calendar
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="flex justify-between items-center mb-2">
+      <CardContent className="p-4">
+        <div className="flex justify-between items-center mb-3">
           <span className="text-sm text-gray-500">Timezone: {timeZone}</span>
           <Button 
             variant="ghost" 
             size="sm"
+            className="text-purple-600 hover:text-purple-800 hover:bg-purple-50"
             onClick={() => {
               const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
               toast({
@@ -51,25 +52,24 @@ const CalendarSidebar: React.FC<CalendarSidebarProps> = ({
           mode="single"
           selected={date}
           onSelect={onDateSelect}
-          className="rounded-md border pointer-events-auto"
+          className="rounded-md border pointer-events-auto w-full"
           modifiers={{
             hasNote: isDayWithNote
           }}
           modifiersStyles={{
             hasNote: { 
               fontWeight: 'bold',
-              backgroundColor: 'rgba(79, 70, 229, 0.1)',
+              backgroundColor: 'rgba(126, 34, 206, 0.1)',
               borderRadius: '100%' 
             }
           }}
         />
-        <div className="mt-4">
+        <div className="mt-5">
           <Button 
-            variant="outline" 
-            className="w-full"
+            className="w-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:from-purple-600 hover:to-indigo-700 transition-all py-6"
             onClick={onAddMeeting}
           >
-            <Plus size={16} className="mr-2" />
+            <Plus size={18} className="mr-2" />
             Add Meeting for {date ? format(date, 'MMM dd, yyyy') : 'Selected Date'}
           </Button>
         </div>

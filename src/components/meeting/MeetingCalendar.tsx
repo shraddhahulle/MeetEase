@@ -142,11 +142,12 @@ export const MeetingCalendar: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold">Meeting Schedule</h2>
+        <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Meeting Schedule</h2>
         <div className="flex space-x-2">
           <Button 
             variant={viewMode === 'calendar' ? 'default' : 'outline'} 
             size="sm"
+            className={viewMode === 'calendar' ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white' : 'border-purple-200 text-purple-700 hover:bg-purple-50'}
             onClick={() => setViewMode('calendar')}
           >
             Calendar
@@ -154,13 +155,14 @@ export const MeetingCalendar: React.FC = () => {
           <Button 
             variant={viewMode === 'list' ? 'default' : 'outline'} 
             size="sm"
+            className={viewMode === 'list' ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white' : 'border-purple-200 text-purple-700 hover:bg-purple-50'}
             onClick={() => setViewMode('list')}
           >
             List View
           </Button>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="border-purple-200 text-purple-700 hover:bg-purple-50">
                 <FileText size={16} className="mr-2" />
                 Export
               </Button>
@@ -169,7 +171,7 @@ export const MeetingCalendar: React.FC = () => {
               <div className="space-y-2">
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start"
+                  className="w-full justify-start text-purple-700 hover:bg-purple-50 hover:text-purple-800"
                   onClick={() => handleExportAllToPDF(calendarNotes)}
                 >
                   <FileText size={16} className="mr-2" />
@@ -177,7 +179,7 @@ export const MeetingCalendar: React.FC = () => {
                 </Button>
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start"
+                  className="w-full justify-start text-purple-700 hover:bg-purple-50 hover:text-purple-800"
                   onClick={() => {
                     toast({
                       title: "Google Calendar",
@@ -197,7 +199,7 @@ export const MeetingCalendar: React.FC = () => {
                 </Button>
                 <Button 
                   variant="ghost" 
-                  className="w-full justify-start"
+                  className="w-full justify-start text-purple-700 hover:bg-purple-50 hover:text-purple-800"
                   onClick={() => {
                     toast({
                       title: "Outlook Calendar",
@@ -234,13 +236,13 @@ export const MeetingCalendar: React.FC = () => {
           </div>
 
           <div className="md:col-span-2">
-            <Card>
-              <CardHeader>
+            <Card className="border-purple-100 shadow-lg">
+              <CardHeader className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-t-lg">
                 <CardTitle className="text-lg">
                   {date ? format(date, 'EEEE, MMMM dd, yyyy') : "Select a Date"}
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-5">
                 {showForm ? (
                   <MeetingForm 
                     date={date}
