@@ -1,7 +1,6 @@
 
 import React from 'react';
 import FeatureCard from '../ui/FeatureCard';
-import { ScheduleDemo } from '../ui/ScheduleDemo';
 import { 
   Calendar, Clock, Users, Bot, Video, Bell, 
   PanelLeft, Moon, FileText, Laptop, Shield 
@@ -63,7 +62,7 @@ const Features = () => {
     <section id="features" className="py-20">
       <div className="container mx-auto px-6">
         <div className="flex flex-col lg:flex-row gap-20">
-          <div className="lg:w-2/3">
+          <div className="lg:w-full">
             <span className="inline-flex items-center px-3 py-1 rounded-full bg-meetease-green/10 text-meetease-green text-sm font-medium mb-6">
               Features
             </span>
@@ -75,7 +74,7 @@ const Features = () => {
               No more back-and-forth emails or calendar conflicts.
             </p>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {features.map((feature, index) => (
                 <FeatureCard
                   key={index}
@@ -86,12 +85,6 @@ const Features = () => {
                   className="animate-fade-in [animation-delay:200ms]"
                 />
               ))}
-            </div>
-          </div>
-          
-          <div className="lg:w-1/3 mt-8 lg:mt-0">
-            <div className="sticky top-24">
-              <ScheduleDemo />
             </div>
           </div>
         </div>

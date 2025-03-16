@@ -21,7 +21,6 @@ import {
   VideoIcon,
   Bell
 } from 'lucide-react';
-import { ScheduleDemo } from '@/components/ui/ScheduleDemo';
 import { VideoMeeting } from '@/components/ui/VideoMeeting';
 import { TeamMembers } from '@/components/ui/TeamMembers';
 import { ReminderExample } from '@/components/ui/ReminderExample';
@@ -657,15 +656,6 @@ const Dashboard = () => {
                 </Button>
               </div>
               <DigitalCalendar />
-            </div>
-          )}
-
-          {activeTab === 'schedule' && (
-            <div>
-              <div className="bg-white rounded-xl shadow-md p-4 mb-4">
-                <h2 className="text-xl font-bold mb-4 text-indigo-900">Schedule a Meeting</h2>
-                <ScheduleDemo />
-              </div>
             </div>
           )}
 
