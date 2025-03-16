@@ -17,7 +17,9 @@ import {
   Save,
   Clock,
   Users,
-  Edit
+  Edit,
+  MapPin,
+  Link
 } from 'lucide-react';
 import { scheduleEmailReminder } from '@/services/reminder';
 import { downloadMeetingPDF } from '@/services/pdfService';
@@ -305,252 +307,272 @@ export const DigitalCalendar = () => {
   };
   
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {/* Calendar */}
-      <div className="md:col-span-1">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center">
-              <CalendarDays className="h-5 w-5 mr-2 text-indigo-600" />
-              Calendar
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={handleDateSelect}
-              className="rounded-md border"
-              modifiers={{
-                hasMeeting: hasMeeting
-              }}
-              modifiersStyles={{
-                hasMeeting: { 
-                  fontWeight: 'bold',
-                  backgroundColor: 'rgba(99, 102, 241, 0.15)',
-                  color: '#4F46E5',
-                  borderRadius: '100%' 
-                }
-              }}
-            />
-            
-            <div className="mt-4">
-              <Button 
-                onClick={handleAddMeeting}
-                className="w-full bg-indigo-600 hover:bg-indigo-700"
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Add Meeting for {selectedDate ? format(selectedDate, 'MMM dd, yyyy') : 'Selected Date'}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-      
-      {/* Meeting details or form */}
-      <div className="md:col-span-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">
-              {selectedDate ? format(selectedDate, 'EEEE, MMMM dd, yyyy') : "Select a Date"}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {showMeetingForm ? (
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">
-                  {editingMeeting ? 'Edit Meeting' : 'Add New Meeting'}
-                </h3>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Meeting Title*
-                    </label>
-                    <Input
-                      name="title"
-                      value={formData.title}
-                      onChange={handleInputChange}
-                      placeholder="Enter meeting title"
-                      required
-                    />
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Start Time*
-                      </label>
-                      <Input
-                        type="time"
-                        name="startTime"
-                        value={formData.startTime}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        End Time*
-                      </label>
-                      <Input
-                        type="time"
-                        name="endTime"
-                        value={formData.endTime}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Location
-                    </label>
-                    <Input
-                      name="location"
-                      value={formData.location}
-                      onChange={handleInputChange}
-                      placeholder="Enter meeting location or link"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Participants (comma separated)
-                    </label>
-                    <Input
-                      name="participants"
-                      value={formData.participants}
-                      onChange={handleInputChange}
-                      placeholder="john@example.com, jane@example.com"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Meeting Notes
-                    </label>
-                    <Textarea
-                      name="notes"
-                      value={formData.notes}
-                      onChange={handleInputChange}
-                      placeholder="Enter meeting agenda or notes"
-                      rows={4}
-                    />
-                  </div>
-                </div>
-                
-                <div className="flex justify-end space-x-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setShowMeetingForm(false);
-                      setEditingMeeting(null);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button 
-                    onClick={handleSaveMeeting}
-                    className="bg-indigo-600 hover:bg-indigo-700"
-                  >
-                    <Save className="mr-2 h-4 w-4" />
-                    {editingMeeting ? 'Update Meeting' : 'Save Meeting'}
-                  </Button>
-                </div>
+    <div className="container mx-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Calendar */}
+        <div className="lg:col-span-1">
+          <Card className="shadow-lg border border-meetease-gray4/30">
+            <CardHeader className="bg-gradient-to-r from-meetease-blue/5 to-meetease-purple/5 rounded-t-xl pb-3">
+              <CardTitle className="text-lg flex items-center">
+                <CalendarDays className="h-5 w-5 mr-2 text-meetease-blue" />
+                Calendar
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={handleDateSelect}
+                className="rounded-md border-0"
+                modifiers={{
+                  hasMeeting: hasMeeting
+                }}
+                modifiersStyles={{
+                  hasMeeting: { 
+                    fontWeight: 'bold',
+                    background: 'linear-gradient(135deg, rgba(155, 135, 245, 0.15), rgba(94, 92, 230, 0.15))',
+                    color: '#5E5CE6',
+                    borderRadius: '100%' 
+                  }
+                }}
+              />
+              
+              <div className="mt-5">
+                <Button 
+                  onClick={handleAddMeeting}
+                  className="w-full bg-gradient-to-r from-meetease-blue to-meetease-indigo hover:from-meetease-indigo hover:to-meetease-blue text-white"
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Meeting for {selectedDate ? format(selectedDate, 'MMM dd, yyyy') : 'Selected Date'}
+                </Button>
               </div>
-            ) : (
-              <div>
-                {filteredMeetings.length > 0 ? (
-                  <div className="space-y-4">
-                    {filteredMeetings.map(meeting => (
-                      <div key={meeting.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <h3 className="font-semibold text-lg">{meeting.title}</h3>
-                            <p className="text-gray-600 flex items-center">
-                              <Clock className="h-4 w-4 mr-1" />
-                              {meeting.startTime} - {meeting.endTime}
-                            </p>
-                            {meeting.location && (
-                              <p className="text-gray-600">Location: {meeting.location}</p>
-                            )}
-                            {meeting.participants.length > 0 && (
-                              <p className="text-gray-600 flex items-center mt-1">
-                                <Users className="h-4 w-4 mr-1" />
-                                {meeting.participants.join(', ')}
-                              </p>
-                            )}
-                          </div>
-                          <div className="flex space-x-2">
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => handleEditMeeting(meeting)}
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => handleDownloadPDF(meeting)}
-                            >
-                              <Download className="h-4 w-4" />
-                            </Button>
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              className="text-red-500 hover:text-red-700"
-                              onClick={() => handleDeleteMeeting(meeting.id)}
-                            >
-                              <Trash className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </div>
-                        
-                        {meeting.notes && (
-                          <div className="mt-3 p-3 bg-gray-50 rounded-md">
-                            <h4 className="text-sm font-medium mb-1">Notes:</h4>
-                            <p className="text-sm text-gray-600">{meeting.notes}</p>
-                          </div>
-                        )}
-                        
-                        <div className="mt-3 text-sm">
-                          <div className="flex justify-between items-center text-gray-500">
-                            <span className="flex items-center">
-                              <Bell className="h-4 w-4 mr-1" />
-                              Reminder: 1 day before
-                            </span>
-                            {meeting.reminderSent && (
-                              <span className="flex items-center text-green-600">
-                                <Mail className="h-4 w-4 mr-1" />
-                                Email reminder sent
-                              </span>
-                            )}
-                          </div>
-                        </div>
+            </CardContent>
+          </Card>
+        </div>
+        
+        {/* Meeting details or form */}
+        <div className="lg:col-span-3">
+          <Card className="shadow-lg border border-meetease-gray4/30">
+            <CardHeader className="bg-gradient-to-r from-meetease-blue/5 to-meetease-purple/5 rounded-t-xl pb-3">
+              <CardTitle className="text-lg">
+                {selectedDate ? format(selectedDate, 'EEEE, MMMM dd, yyyy') : "Select a Date"}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-5">
+              {showMeetingForm ? (
+                <div className="space-y-5">
+                  <h3 className="text-xl font-semibold text-meetease-indigo mb-2">
+                    {editingMeeting ? 'Edit Meeting' : 'Add New Meeting'}
+                  </h3>
+                  
+                  <div className="space-y-5">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Meeting Title*
+                      </label>
+                      <Input
+                        name="title"
+                        value={formData.title}
+                        onChange={handleInputChange}
+                        placeholder="Enter meeting title"
+                        className="premium-input"
+                        required
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Start Time*
+                        </label>
+                        <Input
+                          type="time"
+                          name="startTime"
+                          value={formData.startTime}
+                          onChange={handleInputChange}
+                          className="premium-input"
+                          required
+                        />
                       </div>
-                    ))}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          End Time*
+                        </label>
+                        <Input
+                          type="time"
+                          name="endTime"
+                          value={formData.endTime}
+                          onChange={handleInputChange}
+                          className="premium-input"
+                          required
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Location
+                      </label>
+                      <Input
+                        name="location"
+                        value={formData.location}
+                        onChange={handleInputChange}
+                        placeholder="Enter meeting location or link"
+                        className="premium-input"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Participants (comma separated)
+                      </label>
+                      <Input
+                        name="participants"
+                        value={formData.participants}
+                        onChange={handleInputChange}
+                        placeholder="john@example.com, jane@example.com"
+                        className="premium-input"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Meeting Notes
+                      </label>
+                      <Textarea
+                        name="notes"
+                        value={formData.notes}
+                        onChange={handleInputChange}
+                        placeholder="Enter meeting agenda or notes"
+                        className="premium-input"
+                        rows={4}
+                      />
+                    </div>
                   </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <CalendarDays className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                    <h3 className="text-lg font-medium mb-2">No meetings for this date</h3>
-                    <p className="text-gray-500 mb-4">Schedule a meeting to get started</p>
-                    <Button 
-                      onClick={handleAddMeeting}
-                      className="bg-indigo-600 hover:bg-indigo-700"
+                  
+                  <div className="flex justify-end space-x-3 pt-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setShowMeetingForm(false);
+                        setEditingMeeting(null);
+                      }}
+                      className="border-meetease-gray4/50"
                     >
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add Meeting
+                      Cancel
+                    </Button>
+                    <Button 
+                      onClick={handleSaveMeeting}
+                      className="bg-gradient-to-r from-meetease-blue to-meetease-indigo hover:from-meetease-indigo hover:to-meetease-blue text-white"
+                    >
+                      <Save className="mr-2 h-4 w-4" />
+                      {editingMeeting ? 'Update Meeting' : 'Save Meeting'}
                     </Button>
                   </div>
-                )}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                </div>
+              ) : (
+                <div>
+                  {filteredMeetings.length > 0 ? (
+                    <div className="space-y-4">
+                      {filteredMeetings.map(meeting => (
+                        <div key={meeting.id} className="meeting-card p-4">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h3 className="font-semibold text-xl text-meetease-indigo">{meeting.title}</h3>
+                              <p className="text-gray-600 flex items-center text-sm mt-1">
+                                <Clock className="h-4 w-4 mr-1 text-meetease-blue" />
+                                {meeting.startTime} - {meeting.endTime}
+                              </p>
+                              {meeting.location && (
+                                <p className="text-gray-600 flex items-center text-sm mt-1">
+                                  {meeting.location.includes('http') ? (
+                                    <Link className="h-4 w-4 mr-1 text-meetease-blue" />
+                                  ) : (
+                                    <MapPin className="h-4 w-4 mr-1 text-meetease-blue" />
+                                  )}
+                                  {meeting.location}
+                                </p>
+                              )}
+                              {meeting.participants.length > 0 && (
+                                <p className="text-gray-600 flex items-center text-sm mt-1">
+                                  <Users className="h-4 w-4 mr-1 text-meetease-blue" />
+                                  {meeting.participants.join(', ')}
+                                </p>
+                              )}
+                            </div>
+                            <div className="flex space-x-2">
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                className="border-meetease-gray4/50 text-meetease-blue hover:bg-meetease-blue/5 hover:text-meetease-indigo"
+                                onClick={() => handleEditMeeting(meeting)}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                className="border-meetease-gray4/50 text-meetease-blue hover:bg-meetease-blue/5 hover:text-meetease-indigo"
+                                onClick={() => handleDownloadPDF(meeting)}
+                              >
+                                <Download className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                className="border-meetease-gray4/50 text-red-500 hover:bg-red-50 hover:text-red-700"
+                                onClick={() => handleDeleteMeeting(meeting.id)}
+                              >
+                                <Trash className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          {meeting.notes && (
+                            <div className="mt-3 p-4 bg-meetease-blue/5 rounded-xl">
+                              <h4 className="text-sm font-medium mb-1 text-meetease-indigo">Meeting Notes:</h4>
+                              <p className="text-sm text-gray-600">{meeting.notes}</p>
+                            </div>
+                          )}
+                          
+                          <div className="mt-4 text-sm pt-2 border-t border-meetease-gray4/30">
+                            <div className="flex justify-between items-center text-gray-500">
+                              <span className="flex items-center">
+                                <Bell className="h-4 w-4 mr-1 text-meetease-blue" />
+                                Reminder: 1 day before
+                              </span>
+                              {meeting.reminderSent && (
+                                <span className="flex items-center text-meetease-green">
+                                  <Mail className="h-4 w-4 mr-1" />
+                                  Email reminder sent
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-16">
+                      <div className="bg-meetease-blue/5 rounded-full p-4 inline-block mb-3">
+                        <CalendarDays className="h-12 w-12 text-meetease-blue mx-auto" />
+                      </div>
+                      <h3 className="text-xl font-medium mb-2 text-meetease-indigo">No meetings for this date</h3>
+                      <p className="text-gray-500 mb-5">Schedule a meeting to get started</p>
+                      <Button 
+                        onClick={handleAddMeeting}
+                        className="bg-gradient-to-r from-meetease-blue to-meetease-indigo hover:from-meetease-indigo hover:to-meetease-blue text-white px-6"
+                      >
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Meeting
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

@@ -7,33 +7,33 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 220 15% 16%;
+    --background: 250 25% 98%;
+    --foreground: 260 15% 16%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 15% 16%;
+    --card-foreground: 260 15% 16%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 16%;
+    --popover-foreground: 260 15% 16%;
 
-    --primary: 210 100% 52%;
+    --primary: 260 80% 56%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 15% 16%;
+    --secondary: 260 14% 96%;
+    --secondary-foreground: 260 15% 16%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 8% 56%;
+    --muted: 260 14% 96%;
+    --muted-foreground: 260 8% 56%;
 
-    --accent: 210 100% 52%;
+    --accent: 260 80% 56%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 210 100% 52%;
+    --border: 260 13% 91%;
+    --input: 260 13% 91%;
+    --ring: 260 80% 56%;
 
     --radius: 0.75rem;
   }
@@ -62,11 +62,11 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 rounded-full;
+    @apply bg-primary/20 rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400;
+    @apply bg-primary/30;
   }
 }
 
@@ -108,7 +108,7 @@
 .logo-animation {
   position: absolute;
   border-radius: 50%;
-  background-color: rgba(10, 132, 255, 0.1);
+  background-color: rgba(94, 92, 230, 0.1);
   animation: logo-pulse 1.5s ease-out infinite;
 }
 
@@ -125,7 +125,7 @@
 
 /* Modern button effect */
 .modern-button {
-  @apply px-6 py-3 text-white rounded-full font-medium transition-all duration-300 bg-meetease-blue hover:shadow-[0_6px_20px_rgba(10,132,255,0.4)] active:translate-y-[2px];
+  @apply px-6 py-3 text-white rounded-full font-medium transition-all duration-300 bg-meetease-blue hover:shadow-[0_6px_20px_rgba(94,92,230,0.4)] active:translate-y-[2px];
 }
 
 .floating-card {
@@ -172,7 +172,7 @@
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(10, 132, 255, 0.4) 0%, rgba(10, 132, 255, 0) 70%);
+  background: radial-gradient(circle, rgba(94, 92, 230, 0.4) 0%, rgba(94, 92, 230, 0) 70%);
   filter: blur(30px);
   animation: pulse 4s ease-in-out infinite alternate;
 }
@@ -186,4 +186,25 @@
     opacity: 0.8;
     transform: scale(1.2);
   }
+}
+
+/* Premium calendar styling */
+.premium-calendar .rdp-day_selected {
+  @apply bg-gradient-to-r from-meetease-blue to-meetease-indigo text-white;
+}
+
+.premium-calendar .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+  @apply bg-meetease-blue/10;
+}
+
+.meeting-card {
+  @apply bg-gradient-to-br from-white to-white/90 shadow-lg border border-meetease-gray4/30 rounded-xl transition-all;
+}
+
+.meeting-card:hover {
+  @apply shadow-xl transform -translate-y-1;
+}
+
+.premium-input {
+  @apply border-meetease-gray4 focus:border-meetease-blue focus:ring-1 focus:ring-meetease-blue/20;
 }
