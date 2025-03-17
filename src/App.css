@@ -1,4 +1,3 @@
-
 #root {
   max-width: 1400px;
   margin: 0 auto;
@@ -153,7 +152,7 @@
   @apply border-purple-700 bg-gray-700 text-white;
 }
 
-/* Wide calendar styling */
+/* Wider calendar styling */
 .calendar-container {
   width: 100%;
   min-width: 320px;
@@ -162,4 +161,36 @@
 .premium-calendar {
   width: 100%;
   max-width: none !important;
+}
+
+.premium-calendar .rdp-day,
+.premium-calendar .rdp-head_cell {
+  width: 42px !important;
+  height: 42px !important;
+}
+
+/* Expanded calendar view */
+.calendar-expanded {
+  width: 100%;
+}
+
+/* Calendar transition */
+.calendar-transition {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Down button styling */
+.expand-button {
+  @apply bg-gradient-to-r from-purple-600 to-indigo-600 text-white;
+  transition: transform 0.2s ease;
+}
+
+.expand-button:hover {
+  transform: translateY(2px);
+}
+
+/* Wider day cells */
+.premium-calendar .rdp-cell,
+.premium-calendar .rdp-head_cell {
+  min-width: 42px;
 }
