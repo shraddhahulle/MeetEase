@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { format, addDays, isSameDay, isAfter, parseISO, isBefore } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
@@ -19,7 +18,9 @@ import {
   Users,
   Edit,
   MapPin,
-  Link
+  Link,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import { scheduleEmailReminder } from '@/services/reminder';
 import { downloadMeetingPDF } from '@/services/pdfService';
@@ -41,6 +42,7 @@ export const DigitalCalendar = () => {
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [showMeetingForm, setShowMeetingForm] = useState(false);
   const [editingMeeting, setEditingMeeting] = useState<Meeting | null>(null);
+  const [expandCalendar, setExpandCalendar] = useState(false);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -88,7 +90,6 @@ export const DigitalCalendar = () => {
     const storedMeetings = localStorage.getItem('meetings');
     if (storedMeetings) {
       try {
-        // Parse the dates from strings to Date objects
         const parsedMeetings = JSON.parse(storedMeetings).map((meeting: any) => ({
           ...meeting,
           date: new Date(meeting.date)
@@ -102,24 +103,19 @@ export const DigitalCalendar = () => {
   
   // Check for meeting reminders
   useEffect(() => {
-    // Check if we need to send reminders for meetings happening the next day
     const checkReminders = () => {
       const tomorrow = addDays(new Date(), 1);
       tomorrow.setHours(0, 0, 0, 0);
       
       meetings.forEach(meeting => {
-        // If meeting is tomorrow and reminder not yet sent
         if (isSameDay(meeting.date, tomorrow) && !meeting.reminderSent) {
-          // Send email reminder
           scheduleEmailReminder(meeting);
           
-          // Show notification
           toast({
             title: 'Meeting Tomorrow',
             description: `Reminder: "${meeting.title}" is scheduled for tomorrow at ${meeting.startTime}`,
           });
           
-          // Mark reminder as sent
           setMeetings(prev => 
             prev.map(m => 
               m.id === meeting.id ? { ...m, reminderSent: true } : m
@@ -129,7 +125,6 @@ export const DigitalCalendar = () => {
       });
     };
     
-    // Check immediately and then every hour
     checkReminders();
     const interval = setInterval(checkReminders, 3600000);
     
@@ -150,7 +145,6 @@ export const DigitalCalendar = () => {
       return isBefore(meetingDate, now);
     };
     
-    // Remove past meetings
     const currentMeetings = meetings.filter(meeting => !isInPast(meeting));
     
     if (currentMeetings.length !== meetings.length) {
@@ -244,13 +238,11 @@ export const DigitalCalendar = () => {
       return;
     }
     
-    // Parse participants
     const participants = formData.participants
       ? formData.participants.split(',').map(p => p.trim()).filter(p => p)
       : [];
     
     if (editingMeeting) {
-      // Update existing meeting
       setMeetings(meetings.map(meeting => 
         meeting.id === editingMeeting.id
           ? {
@@ -261,7 +253,7 @@ export const DigitalCalendar = () => {
               participants,
               notes: formData.notes,
               location: formData.location,
-              reminderSent: false // Reset reminder status on edit
+              reminderSent: false
             }
           : meeting
       ));
@@ -271,7 +263,6 @@ export const DigitalCalendar = () => {
         description: 'Your meeting has been updated successfully',
       });
     } else {
-      // Create new meeting
       const newMeeting: Meeting = {
         id: Date.now().toString(),
         title: formData.title,
@@ -296,51 +287,63 @@ export const DigitalCalendar = () => {
     setEditingMeeting(null);
   };
   
-  // Get meetings for the selected date
   const filteredMeetings = meetings.filter(meeting => 
     selectedDate && isSameDay(meeting.date, selectedDate)
   );
   
-  // Calendar date modifier to show dates with meetings
   const hasMeeting = (date: Date) => {
     return meetings.some(meeting => isSameDay(meeting.date, date));
   };
   
+  const toggleCalendarSize = () => {
+    setExpandCalendar(!expandCalendar);
+  };
+  
   return (
-    <div className="container mx-auto">
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Calendar */}
-        <div className="lg:col-span-1">
-          <Card className="shadow-lg border border-meetease-gray4/30">
-            <CardHeader className="bg-gradient-to-r from-meetease-blue/5 to-meetease-purple/5 rounded-t-xl pb-3">
+    <div className="digital-calendar-container">
+      <div className={`digital-calendar-grid ${expandCalendar ? 'grid-cols-1' : ''}`}>
+        <div className={`digital-calendar-sidebar ${expandCalendar ? 'hidden md:block' : ''}`}>
+          <Card className="shadow-lg border border-purple-100 dark:border-purple-800 h-full">
+            <CardHeader className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-t-xl pb-3 flex flex-row justify-between items-center">
               <CardTitle className="text-lg flex items-center">
-                <CalendarDays className="h-5 w-5 mr-2 text-meetease-blue" />
+                <CalendarDays className="h-5 w-5 mr-2" />
                 Calendar
               </CardTitle>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={toggleCalendarSize}
+                className="text-white hover:bg-white/20"
+                title={expandCalendar ? "Show sidebar" : "Hide sidebar"}
+              >
+                {expandCalendar ? <Maximize2 size={18} /> : <Minimize2 size={18} />}
+              </Button>
             </CardHeader>
             <CardContent>
-              <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={handleDateSelect}
-                className="rounded-md border-0"
-                modifiers={{
-                  hasMeeting: hasMeeting
-                }}
-                modifiersStyles={{
-                  hasMeeting: { 
-                    fontWeight: 'bold',
-                    background: 'linear-gradient(135deg, rgba(155, 135, 245, 0.15), rgba(94, 92, 230, 0.15))',
-                    color: '#5E5CE6',
-                    borderRadius: '100%' 
-                  }
-                }}
-              />
+              <div className="calendar-container w-full overflow-hidden rounded-lg border border-purple-100 dark:border-purple-800 transition-all duration-300">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={handleDateSelect}
+                  className="rounded-md border-0 w-full calendar-transition"
+                  modifiers={{
+                    hasMeeting: hasMeeting
+                  }}
+                  modifiersStyles={{
+                    hasMeeting: { 
+                      fontWeight: 'bold',
+                      background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(99, 102, 241, 0.15))',
+                      color: '#8B5CF6',
+                      borderRadius: '100%' 
+                    }
+                  }}
+                />
+              </div>
               
               <div className="mt-5">
                 <Button 
                   onClick={handleAddMeeting}
-                  className="w-full bg-gradient-to-r from-meetease-blue to-meetease-indigo hover:from-meetease-indigo hover:to-meetease-blue text-white"
+                  className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white transition-all py-6 rounded-xl"
                 >
                   <Plus className="mr-2 h-4 w-4" />
                   Add Meeting for {selectedDate ? format(selectedDate, 'MMM dd, yyyy') : 'Selected Date'}
@@ -350,24 +353,33 @@ export const DigitalCalendar = () => {
           </Card>
         </div>
         
-        {/* Meeting details or form */}
-        <div className="lg:col-span-3">
-          <Card className="shadow-lg border border-meetease-gray4/30">
-            <CardHeader className="bg-gradient-to-r from-meetease-blue/5 to-meetease-purple/5 rounded-t-xl pb-3">
-              <CardTitle className="text-lg">
+        <div className="digital-calendar-main">
+          <Card className="shadow-lg border border-purple-100 dark:border-purple-800 transition-all duration-300">
+            <CardHeader className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-t-xl pb-3 flex justify-between items-center">
+              <CardTitle className="text-lg calendar-heading">
                 {selectedDate ? format(selectedDate, 'EEEE, MMMM dd, yyyy') : "Select a Date"}
               </CardTitle>
+              {expandCalendar && (
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={toggleCalendarSize}
+                  className="text-white hover:bg-white/20"
+                >
+                  <Maximize2 size={18} className="mr-1" /> Show Calendar
+                </Button>
+              )}
             </CardHeader>
             <CardContent className="pt-5">
               {showMeetingForm ? (
                 <div className="space-y-5">
-                  <h3 className="text-xl font-semibold text-meetease-indigo mb-2">
+                  <h3 className="text-xl font-semibold text-purple-700 dark:text-purple-300 mb-2">
                     {editingMeeting ? 'Edit Meeting' : 'Add New Meeting'}
                   </h3>
                   
                   <div className="space-y-5">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Meeting Title*
                       </label>
                       <Input
@@ -382,7 +394,7 @@ export const DigitalCalendar = () => {
                     
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           Start Time*
                         </label>
                         <Input
@@ -395,7 +407,7 @@ export const DigitalCalendar = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           End Time*
                         </label>
                         <Input
@@ -410,7 +422,7 @@ export const DigitalCalendar = () => {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Location
                       </label>
                       <Input
@@ -423,7 +435,7 @@ export const DigitalCalendar = () => {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Participants (comma separated)
                       </label>
                       <Input
@@ -436,7 +448,7 @@ export const DigitalCalendar = () => {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Meeting Notes
                       </label>
                       <Textarea
@@ -457,13 +469,13 @@ export const DigitalCalendar = () => {
                         setShowMeetingForm(false);
                         setEditingMeeting(null);
                       }}
-                      className="border-meetease-gray4/50"
+                      className="border-purple-200 dark:border-purple-800"
                     >
                       Cancel
                     </Button>
                     <Button 
                       onClick={handleSaveMeeting}
-                      className="bg-gradient-to-r from-meetease-blue to-meetease-indigo hover:from-meetease-indigo hover:to-meetease-blue text-white"
+                      className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white"
                     >
                       <Save className="mr-2 h-4 w-4" />
                       {editingMeeting ? 'Update Meeting' : 'Save Meeting'}
@@ -478,24 +490,24 @@ export const DigitalCalendar = () => {
                         <div key={meeting.id} className="meeting-card p-4">
                           <div className="flex justify-between items-start">
                             <div>
-                              <h3 className="font-semibold text-xl text-meetease-indigo">{meeting.title}</h3>
-                              <p className="text-gray-600 flex items-center text-sm mt-1">
-                                <Clock className="h-4 w-4 mr-1 text-meetease-blue" />
+                              <h3 className="font-semibold text-xl text-purple-700 dark:text-purple-300">{meeting.title}</h3>
+                              <p className="text-gray-600 dark:text-gray-300 flex items-center text-sm mt-1">
+                                <Clock className="h-4 w-4 mr-1 text-purple-600 dark:text-purple-400" />
                                 {meeting.startTime} - {meeting.endTime}
                               </p>
                               {meeting.location && (
-                                <p className="text-gray-600 flex items-center text-sm mt-1">
+                                <p className="text-gray-600 dark:text-gray-300 flex items-center text-sm mt-1">
                                   {meeting.location.includes('http') ? (
-                                    <Link className="h-4 w-4 mr-1 text-meetease-blue" />
+                                    <Link className="h-4 w-4 mr-1 text-purple-600 dark:text-purple-400" />
                                   ) : (
-                                    <MapPin className="h-4 w-4 mr-1 text-meetease-blue" />
+                                    <MapPin className="h-4 w-4 mr-1 text-purple-600 dark:text-purple-400" />
                                   )}
                                   {meeting.location}
                                 </p>
                               )}
                               {meeting.participants.length > 0 && (
-                                <p className="text-gray-600 flex items-center text-sm mt-1">
-                                  <Users className="h-4 w-4 mr-1 text-meetease-blue" />
+                                <p className="text-gray-600 dark:text-gray-300 flex items-center text-sm mt-1">
+                                  <Users className="h-4 w-4 mr-1 text-purple-600 dark:text-purple-400" />
                                   {meeting.participants.join(', ')}
                                 </p>
                               )}
@@ -504,7 +516,7 @@ export const DigitalCalendar = () => {
                               <Button 
                                 variant="outline" 
                                 size="sm"
-                                className="border-meetease-gray4/50 text-meetease-blue hover:bg-meetease-blue/5 hover:text-meetease-indigo"
+                                className="border-purple-200 text-purple-700 hover:bg-purple-50 hover:text-purple-800 dark:border-purple-800 dark:text-purple-300 dark:hover:bg-purple-900/30"
                                 onClick={() => handleEditMeeting(meeting)}
                               >
                                 <Edit className="h-4 w-4" />
@@ -512,7 +524,7 @@ export const DigitalCalendar = () => {
                               <Button 
                                 variant="outline" 
                                 size="sm"
-                                className="border-meetease-gray4/50 text-meetease-blue hover:bg-meetease-blue/5 hover:text-meetease-indigo"
+                                className="border-purple-200 text-purple-700 hover:bg-purple-50 hover:text-purple-800 dark:border-purple-800 dark:text-purple-300 dark:hover:bg-purple-900/30"
                                 onClick={() => handleDownloadPDF(meeting)}
                               >
                                 <Download className="h-4 w-4" />
@@ -520,7 +532,7 @@ export const DigitalCalendar = () => {
                               <Button 
                                 variant="outline" 
                                 size="sm"
-                                className="border-meetease-gray4/50 text-red-500 hover:bg-red-50 hover:text-red-700"
+                                className="border-purple-200 text-red-500 hover:bg-red-50 hover:text-red-700 dark:border-purple-800 dark:hover:bg-red-900/30"
                                 onClick={() => handleDeleteMeeting(meeting.id)}
                               >
                                 <Trash className="h-4 w-4" />
@@ -529,20 +541,20 @@ export const DigitalCalendar = () => {
                           </div>
                           
                           {meeting.notes && (
-                            <div className="mt-3 p-4 bg-meetease-blue/5 rounded-xl">
-                              <h4 className="text-sm font-medium mb-1 text-meetease-indigo">Meeting Notes:</h4>
-                              <p className="text-sm text-gray-600">{meeting.notes}</p>
+                            <div className="mt-3 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
+                              <h4 className="text-sm font-medium mb-1 text-purple-700 dark:text-purple-300">Meeting Notes:</h4>
+                              <p className="text-sm text-gray-600 dark:text-gray-300">{meeting.notes}</p>
                             </div>
                           )}
                           
-                          <div className="mt-4 text-sm pt-2 border-t border-meetease-gray4/30">
-                            <div className="flex justify-between items-center text-gray-500">
+                          <div className="mt-4 text-sm pt-2 border-t border-purple-100 dark:border-purple-800">
+                            <div className="flex justify-between items-center text-gray-500 dark:text-gray-400">
                               <span className="flex items-center">
-                                <Bell className="h-4 w-4 mr-1 text-meetease-blue" />
+                                <Bell className="h-4 w-4 mr-1 text-purple-600 dark:text-purple-400" />
                                 Reminder: 1 day before
                               </span>
                               {meeting.reminderSent && (
-                                <span className="flex items-center text-meetease-green">
+                                <span className="flex items-center text-green-600 dark:text-green-400">
                                   <Mail className="h-4 w-4 mr-1" />
                                   Email reminder sent
                                 </span>
@@ -554,14 +566,14 @@ export const DigitalCalendar = () => {
                     </div>
                   ) : (
                     <div className="text-center py-16">
-                      <div className="bg-meetease-blue/5 rounded-full p-4 inline-block mb-3">
-                        <CalendarDays className="h-12 w-12 text-meetease-blue mx-auto" />
+                      <div className="bg-purple-50 dark:bg-purple-900/20 rounded-full p-4 inline-block mb-3">
+                        <CalendarDays className="h-12 w-12 text-purple-600 dark:text-purple-400 mx-auto" />
                       </div>
-                      <h3 className="text-xl font-medium mb-2 text-meetease-indigo">No meetings for this date</h3>
-                      <p className="text-gray-500 mb-5">Schedule a meeting to get started</p>
+                      <h3 className="text-xl font-medium mb-2 text-purple-700 dark:text-purple-300">No meetings for this date</h3>
+                      <p className="text-gray-500 dark:text-gray-400 mb-5">Schedule a meeting to get started</p>
                       <Button 
                         onClick={handleAddMeeting}
-                        className="bg-gradient-to-r from-meetease-blue to-meetease-indigo hover:from-meetease-indigo hover:to-meetease-blue text-white px-6"
+                        className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6"
                       >
                         <Plus className="mr-2 h-4 w-4" />
                         Add Meeting
@@ -573,6 +585,27 @@ export const DigitalCalendar = () => {
             </CardContent>
           </Card>
         </div>
+      </div>
+      
+      <div className="flex justify-center mt-4 md:hidden">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={toggleCalendarSize}
+          className="text-purple-700 border-purple-200 hover:bg-purple-50 dark:text-purple-300 dark:border-purple-800 dark:hover:bg-purple-900/30"
+        >
+          {expandCalendar ? (
+            <>
+              <Maximize2 className="h-4 w-4 mr-1" />
+              Show Calendar
+            </>
+          ) : (
+            <>
+              <Minimize2 className="h-4 w-4 mr-1" />
+              Hide Calendar
+            </>
+          )}
+        </Button>
       </div>
     </div>
   );

@@ -194,3 +194,60 @@
 .premium-calendar .rdp-head_cell {
   min-width: 42px;
 }
+
+/* Wider and improved digital calendar styling */
+.digital-calendar-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.digital-calendar-grid {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 1.5rem;
+}
+
+.digital-calendar-sidebar {
+  height: 100%;
+}
+
+.digital-calendar-main {
+  width: 100%;
+}
+
+.calendar-day-cell {
+  width: 48px !important;
+  height: 48px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.5rem auto;
+}
+
+.calendar-heading {
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.day-with-meeting {
+  position: relative;
+}
+
+.day-with-meeting::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: #8B5CF6;
+  border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+  .digital-calendar-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -33,12 +33,12 @@ function Calendar({
         table: "w-full border-collapse space-y-1",
         head_row: "flex w-full justify-between",
         head_cell:
-          "text-purple-700 dark:text-purple-300 rounded-md w-12 font-normal text-[0.9rem] m-0.5 text-center",
+          "text-purple-700 dark:text-purple-300 rounded-md w-14 font-normal text-[0.9rem] m-0.5 text-center",
         row: "flex w-full mt-2 justify-between",
-        cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 h-12 w-12 m-0.5 [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-purple-500/50 [&:has([aria-selected])]:bg-purple-500/10 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md",
+        cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 h-14 w-14 m-0.5 [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-purple-500/50 [&:has([aria-selected])]:bg-purple-500/10 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-12 w-12 p-0 font-normal aria-selected:opacity-100 hover:bg-purple-100 hover:text-purple-900 dark:hover:bg-purple-800 dark:hover:text-purple-100"
+          "h-14 w-14 p-0 font-normal aria-selected:opacity-100 hover:bg-purple-100 hover:text-purple-900 dark:hover:bg-purple-800 dark:hover:text-purple-100"
         ),
         day_range_end: "day-range-end",
         day_selected:
