@@ -27,7 +27,7 @@ const MeetingDetails: React.FC<MeetingDetailsProps> = ({
           {selectedDateNotes.map((note, index) => (
             <div 
               key={index} 
-              className={`p-4 rounded-lg border-l-4 shadow-md transition-all hover:-translate-y-1 ${
+              className={`p-4 rounded-lg border-l-4 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg ${
                 note.color === 'indigo' ? 'border-l-indigo-500 bg-indigo-50 dark:bg-indigo-900/20' :
                 note.color === 'purple' ? 'border-l-purple-500 bg-purple-50 dark:bg-purple-900/20' :
                 note.color === 'green' ? 'border-l-green-500 bg-green-50 dark:bg-green-900/20' :
@@ -86,14 +86,16 @@ const MeetingDetails: React.FC<MeetingDetailsProps> = ({
                     variant="ghost" 
                     size="sm" 
                     onClick={() => onExportToPDF(note)}
-                    className="h-8 w-8 p-0 rounded-full"
+                    className="h-8 w-8 p-0 rounded-full text-gray-600 hover:text-purple-700 hover:bg-purple-100 dark:text-gray-300 dark:hover:text-purple-300 dark:hover:bg-purple-900/30"
+                    title="Export to PDF"
                   >
                     <FileText size={14} />
                   </Button>
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="h-8 w-8 p-0 rounded-full"
+                    className="h-8 w-8 p-0 rounded-full text-gray-600 hover:text-purple-700 hover:bg-purple-100 dark:text-gray-300 dark:hover:text-purple-300 dark:hover:bg-purple-900/30"
+                    title="Edit Meeting"
                     onClick={() => {
                       toast({
                         title: "Edit Meeting",
@@ -106,7 +108,8 @@ const MeetingDetails: React.FC<MeetingDetailsProps> = ({
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 h-8 w-8 p-0 rounded-full"
+                    className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/30 h-8 w-8 p-0 rounded-full"
+                    title="Delete Meeting"
                     onClick={() => onDelete(index)}
                   >
                     <Trash2 size={14} />
@@ -125,7 +128,7 @@ const MeetingDetails: React.FC<MeetingDetailsProps> = ({
           <p className="text-gray-500 dark:text-gray-400 mb-6">Plan your day by adding meetings to your calendar</p>
           <Button 
             onClick={onShowForm}
-            className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white"
+            className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white transition-all"
           >
             Schedule a Meeting
           </Button>

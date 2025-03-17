@@ -37,7 +37,7 @@ export const MeetingCalendar: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-2 md:p-4 transition-all duration-300">
       <CalendarViewControls 
         viewMode={viewMode}
         setViewMode={setViewMode}

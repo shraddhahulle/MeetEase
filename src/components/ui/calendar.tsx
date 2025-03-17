@@ -17,7 +17,7 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-4 pointer-events-auto premium-calendar w-full max-w-none", className)}
+      className={cn("p-3 pointer-events-auto premium-calendar w-full max-w-none", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4 w-full",
@@ -33,22 +33,22 @@ function Calendar({
         table: "w-full border-collapse space-y-1",
         head_row: "flex w-full",
         head_cell:
-          "text-purple-700 dark:text-purple-300 rounded-md w-10 font-medium text-[0.9rem] m-0.5",
+          "text-purple-700 dark:text-purple-300 rounded-md w-10 font-normal text-[0.9rem] m-0.5",
         row: "flex w-full mt-2",
         cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 h-10 w-10 m-0.5 [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-purple-500/50 [&:has([aria-selected])]:bg-purple-500/10 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-10 w-10 p-0 font-normal aria-selected:opacity-100 hover:bg-purple-500/10 hover:text-purple-700 dark:hover:text-purple-300"
+          "h-10 w-10 p-0 font-normal aria-selected:opacity-100 hover:bg-purple-100 hover:text-purple-900 dark:hover:bg-purple-800 dark:hover:text-purple-100"
         ),
         day_range_end: "day-range-end",
         day_selected:
           "bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:text-white dark:bg-gradient-to-r dark:from-purple-500 dark:to-indigo-500 dark:text-white focus:bg-purple-700 focus:text-white",
-        day_today: "bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 font-medium border border-purple-200 dark:border-purple-700",
+        day_today: "bg-purple-100 dark:bg-purple-900 text-purple-900 dark:text-purple-100 font-medium border-2 border-purple-400 dark:border-purple-500",
         day_outside:
           "day-outside text-gray-400 opacity-50 aria-selected:bg-purple-500/5 aria-selected:text-gray-400 aria-selected:opacity-30",
         day_disabled: "text-gray-400 opacity-50",
         day_range_middle:
-          "aria-selected:bg-purple-500/20 aria-selected:text-purple-700 dark:aria-selected:text-purple-300",
+          "aria-selected:bg-purple-100 aria-selected:text-purple-900 dark:aria-selected:bg-purple-800 dark:aria-selected:text-purple-100",
         day_hidden: "invisible",
         ...classNames,
       }}

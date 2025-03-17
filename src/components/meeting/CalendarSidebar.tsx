@@ -23,7 +23,7 @@ const CalendarSidebar: React.FC<CalendarSidebarProps> = ({
   isDayWithNote
 }) => {
   return (
-    <Card className="w-full shadow-xl border-purple-100 premium-card">
+    <Card className="w-full shadow-xl border-purple-100 premium-card h-full transition-all duration-300 hover:shadow-purple-200/20 dark:hover:shadow-purple-800/20">
       <CardHeader className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-t-lg pb-4">
         <CardTitle className="text-xl flex items-center">
           <CalendarIcon className="h-5 w-5 mr-2" />
@@ -32,14 +32,14 @@ const CalendarSidebar: React.FC<CalendarSidebarProps> = ({
       </CardHeader>
       <CardContent className="p-5">
         <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center text-sm text-gray-600">
+          <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
             <Globe size={14} className="mr-1.5" />
             <span>{timeZone}</span>
           </div>
           <Button 
             variant="ghost" 
             size="sm"
-            className="text-purple-600 hover:text-purple-800 hover:bg-purple-50"
+            className="text-purple-600 hover:text-purple-800 hover:bg-purple-50 dark:text-purple-400 dark:hover:text-purple-300 dark:hover:bg-purple-900/30"
             onClick={() => {
               const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
               toast({
@@ -51,12 +51,12 @@ const CalendarSidebar: React.FC<CalendarSidebarProps> = ({
             Auto-detect
           </Button>
         </div>
-        <div className="calendar-container w-full">
+        <div className="calendar-container w-full overflow-hidden rounded-lg border border-purple-100 dark:border-purple-800">
           <Calendar
             mode="single"
             selected={date}
             onSelect={onDateSelect}
-            className="rounded-md border w-full pointer-events-auto max-w-none premium-calendar"
+            className="rounded-md w-full pointer-events-auto max-w-none premium-calendar"
             modifiers={{
               hasNote: isDayWithNote
             }}
@@ -71,7 +71,7 @@ const CalendarSidebar: React.FC<CalendarSidebarProps> = ({
         </div>
         <div className="mt-6">
           <Button 
-            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 transition-all py-6 shadow-md shadow-purple-500/20"
+            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 transition-all py-6 shadow-md shadow-purple-500/20 rounded-xl"
             onClick={onAddMeeting}
           >
             <Plus size={20} className="mr-2" />
