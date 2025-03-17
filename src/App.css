@@ -1,3 +1,4 @@
+
 #root {
   max-width: 1400px;
   margin: 0 auto;
@@ -12,10 +13,10 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em rgba(139, 92, 246, 0.8));
+  filter: drop-shadow(0 0 2em rgba(0, 184, 212, 0.8));
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em rgba(139, 92, 246, 0.8));
+  filter: drop-shadow(0 0 2em rgba(0, 184, 212, 0.8));
 }
 
 @keyframes logo-spin {
@@ -37,13 +38,13 @@
   padding: 2em;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 184, 212, 0.15);
   transition: all 0.3s ease;
 }
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 36px rgba(139, 92, 246, 0.25);
+  box-shadow: 0 12px 36px rgba(0, 184, 212, 0.25);
 }
 
 .read-the-docs {
@@ -52,7 +53,7 @@
 
 /* Vibrant gradient buttons */
 .gradient-button {
-  background: linear-gradient(45deg, #8B5CF6, #6366F1);
+  background: linear-gradient(45deg, #00B8D4, #00BCD4);
   color: white;
   border: none;
   border-radius: 8px;
@@ -63,16 +64,16 @@
 
 .gradient-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 15px rgba(139, 92, 246, 0.3);
+  box-shadow: 0 8px 15px rgba(0, 184, 212, 0.3);
 }
 
 /* Vibrant backgrounds and accents */
 .vibrant-bg {
-  background: linear-gradient(120deg, #6366F1, #8B5CF6);
+  background: linear-gradient(120deg, #00BCD4, #00B8D4);
 }
 
 .vibrant-text {
-  background: linear-gradient(90deg, #8B5CF6, #6366F1);
+  background: linear-gradient(90deg, #00B8D4, #00BCD4);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: bold;
@@ -97,15 +98,15 @@
 
 /* Premium calendar styling - enhanced */
 .premium-calendar .rdp-day_selected {
-  @apply bg-gradient-to-r from-purple-600 to-indigo-600 text-white;
+  @apply bg-gradient-to-r from-cyan-500 to-blue-400 text-white;
 }
 
 .premium-calendar .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
-  @apply bg-purple-100 text-purple-800;
+  @apply bg-cyan-100 text-cyan-800;
 }
 
 .meeting-card {
-  @apply bg-white shadow-lg border border-purple-100 rounded-xl transition-all dark:bg-gray-800 dark:border-purple-800;
+  @apply bg-white shadow-lg border border-cyan-100 rounded-xl transition-all dark:bg-gray-800 dark:border-cyan-800;
 }
 
 .meeting-card:hover {
@@ -113,43 +114,43 @@
 }
 
 .premium-input {
-  @apply border-purple-200 focus:border-purple-500 focus:ring-1 focus:ring-purple-500/20;
+  @apply border-cyan-200 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/20;
 }
 
 /* Button styling */
 .premium-button {
-  @apply bg-gradient-to-r from-purple-600 to-indigo-600 text-white transition-all;
+  @apply bg-gradient-to-r from-cyan-500 to-blue-400 text-white transition-all;
 }
 
 .premium-button:hover {
-  @apply from-purple-700 to-indigo-700 shadow-md shadow-purple-500/20;
+  @apply from-cyan-600 to-blue-500 shadow-md shadow-cyan-500/20;
 }
 
 /* Card styling */
 .premium-card {
-  @apply border-purple-100 shadow-lg rounded-xl overflow-hidden dark:border-purple-800 dark:bg-gray-800;
+  @apply border-cyan-100 shadow-lg rounded-xl overflow-hidden dark:border-cyan-800 dark:bg-gray-800;
 }
 
 /* Form controls */
 .premium-control {
-  @apply border-purple-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-300 rounded-lg;
+  @apply border-cyan-200 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-300 rounded-lg;
 }
 
 /* Dark mode overrides */
 .dark .premium-card {
-  @apply bg-gray-800 border-purple-800;
+  @apply bg-gray-800 border-cyan-800;
 }
 
 .dark .premium-calendar .rdp-day_selected {
-  @apply bg-gradient-to-r from-purple-500 to-indigo-500 text-white;
+  @apply bg-gradient-to-r from-cyan-500 to-blue-400 text-white;
 }
 
 .dark .premium-calendar .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
-  @apply bg-purple-900 text-purple-200;
+  @apply bg-cyan-900 text-cyan-200;
 }
 
 .dark .premium-input {
-  @apply border-purple-700 bg-gray-700 text-white;
+  @apply border-cyan-700 bg-gray-700 text-white;
 }
 
 /* Wider calendar styling */
@@ -181,7 +182,7 @@
 
 /* Down button styling */
 .expand-button {
-  @apply bg-gradient-to-r from-purple-600 to-indigo-600 text-white;
+  @apply bg-gradient-to-r from-cyan-500 to-blue-400 text-white;
   transition: transform 0.2s ease;
 }
 
@@ -242,7 +243,7 @@
   transform: translateX(-50%);
   width: 6px;
   height: 6px;
-  background-color: #8B5CF6;
+  background-color: #00B8D4;
   border-radius: 50%;
 }
 

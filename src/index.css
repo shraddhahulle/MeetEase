@@ -16,24 +16,24 @@
     --popover: 0 0% 100%;
     --popover-foreground: 260 15% 16%;
 
-    --primary: 260 80% 56%;
+    --primary: 187 100% 42%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 260 14% 96%;
+    --secondary: 187 14% 96%;
     --secondary-foreground: 260 15% 16%;
 
-    --muted: 260 14% 96%;
-    --muted-foreground: 260 8% 56%;
+    --muted: 187 14% 96%;
+    --muted-foreground: 187 8% 56%;
 
-    --accent: 260 80% 56%;
+    --accent: 187 100% 42%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 260 13% 91%;
-    --input: 260 13% 91%;
-    --ring: 260 80% 56%;
+    --border: 187 13% 91%;
+    --input: 187 13% 91%;
+    --ring: 187 100% 42%;
 
     --radius: 0.75rem;
   }
@@ -57,7 +57,7 @@
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
 
-    --accent: 260 80% 56%;
+    --accent: 187 100% 42%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -106,7 +106,7 @@
   }
 
   .premium-card {
-    @apply backdrop-blur-xl bg-white/95 border border-purple-100 shadow-lg rounded-2xl dark:bg-gray-800/95 dark:border-purple-800/50;
+    @apply backdrop-blur-xl bg-white/95 border border-cyan-100 shadow-lg rounded-2xl dark:bg-gray-800/95 dark:border-cyan-800/50;
   }
 
   .text-balance {
@@ -114,7 +114,7 @@
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-blue-400;
   }
 
   .hover-scale {
@@ -138,7 +138,7 @@
 .logo-animation {
   position: absolute;
   border-radius: 50%;
-  background-color: rgba(139, 92, 246, 0.2);
+  background-color: rgba(0, 184, 212, 0.2);
   animation: logo-pulse 1.5s ease-out infinite;
 }
 
@@ -155,7 +155,7 @@
 
 /* Modern button effect */
 .modern-button {
-  @apply px-6 py-3 text-white rounded-full font-medium transition-all duration-300 bg-gradient-to-r from-purple-600 to-indigo-600 hover:shadow-[0_6px_20px_rgba(139,92,246,0.4)] active:translate-y-[2px];
+  @apply px-6 py-3 text-white rounded-full font-medium transition-all duration-300 bg-gradient-to-r from-cyan-500 to-blue-400 hover:shadow-[0_6px_20px_rgba(0,184,212,0.4)] active:translate-y-[2px];
 }
 
 .floating-card {
@@ -202,7 +202,7 @@
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, rgba(139, 92, 246, 0) 70%);
+  background: radial-gradient(circle, rgba(0, 184, 212, 0.4) 0%, rgba(0, 184, 212, 0) 70%);
   filter: blur(30px);
   animation: pulse 4s ease-in-out infinite alternate;
 }
@@ -220,15 +220,15 @@
 
 /* Premium calendar styling */
 .premium-calendar .rdp-day_selected {
-  @apply bg-gradient-to-r from-purple-600 to-indigo-600 text-white;
+  @apply bg-gradient-to-r from-cyan-500 to-blue-400 text-white;
 }
 
 .premium-calendar .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
-  @apply bg-purple-100 dark:bg-purple-900;
+  @apply bg-cyan-100 dark:bg-cyan-900;
 }
 
 .meeting-card {
-  @apply bg-gradient-to-br from-white to-white/90 shadow-lg border border-purple-100 rounded-xl transition-all dark:from-gray-800 dark:to-gray-900 dark:border-purple-900/30;
+  @apply bg-gradient-to-br from-white to-white/90 shadow-lg border border-cyan-100 rounded-xl transition-all dark:from-gray-800 dark:to-gray-900 dark:border-cyan-900/30;
 }
 
 .meeting-card:hover {
@@ -236,7 +236,7 @@
 }
 
 .premium-input {
-  @apply border-purple-200 focus:border-purple-600 focus:ring-1 focus:ring-purple-600/20 dark:border-purple-700 dark:bg-gray-800 dark:text-white;
+  @apply border-cyan-200 focus:border-cyan-600 focus:ring-1 focus:ring-cyan-600/20 dark:border-cyan-700 dark:bg-gray-800 dark:text-white;
 }
 
 /* Calendar table enlargement */

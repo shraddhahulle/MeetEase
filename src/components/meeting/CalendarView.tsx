@@ -53,8 +53,8 @@ const CalendarView: React.FC<CalendarViewProps> = ({
         </div>
 
         <div className={expanded ? 'md:col-span-1' : 'md:col-span-2'}>
-          <Card className="border-purple-100 shadow-xl dark:border-purple-800 transition-all duration-300 hover:shadow-purple-200/20 dark:hover:shadow-purple-800/20">
-            <CardHeader className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-t-lg p-5 flex flex-row justify-between items-center">
+          <Card className="border-cyan-100 shadow-xl dark:border-cyan-800 transition-all duration-300 hover:shadow-cyan-200/20 dark:hover:shadow-cyan-800/20">
+            <CardHeader className="bg-gradient-to-r from-cyan-500 to-blue-400 text-white rounded-t-lg p-5 flex flex-row justify-between items-center">
               <CardTitle className="text-xl font-semibold flex items-center">
                 {date ? format(date, 'EEEE, MMMM dd, yyyy') : "Select a Date"}
               </CardTitle>
@@ -106,7 +106,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
           variant="outline"
           size="sm"
           onClick={toggleExpanded}
-          className="text-purple-700 border-purple-200 hover:bg-purple-50 dark:text-purple-300 dark:border-purple-800 dark:hover:bg-purple-900/30"
+          className="text-cyan-700 border-cyan-200 hover:bg-cyan-50 dark:text-cyan-300 dark:border-cyan-800 dark:hover:bg-cyan-900/30"
         >
           {expanded ? (
             <>
