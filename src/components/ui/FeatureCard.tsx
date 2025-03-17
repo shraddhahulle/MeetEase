@@ -9,6 +9,7 @@ interface FeatureCardProps {
   icon: LucideIcon;
   className?: string;
   iconColor?: string;
+  onClick?: () => void;
 }
 
 const FeatureCard = ({
@@ -16,18 +17,20 @@ const FeatureCard = ({
   description,
   icon: Icon,
   className,
-  iconColor = 'text-meetease-blue',
+  iconColor = 'text-cyan-500',
+  onClick
 }: FeatureCardProps) => {
   return (
     <div 
       className={cn(
-        'premium-card p-6 transition-all duration-500 hover-scale',
+        'premium-card p-6 transition-all duration-500 hover-scale cursor-pointer',
         className
       )}
+      onClick={onClick}
     >
       <div className={cn(
         'rounded-full w-12 h-12 flex items-center justify-center mb-4',
-        'bg-meetease-blue/10', iconColor
+        'bg-cyan-500/10', iconColor
       )}>
         <Icon className="w-6 h-6" />
       </div>

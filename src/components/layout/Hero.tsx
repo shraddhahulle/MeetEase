@@ -76,9 +76,9 @@ const Hero = () => {
   return (
     <div className="relative overflow-hidden pt-28 pb-16 md:pt-32 md:pb-24" ref={heroRef}>
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-meetease-blue/5 to-transparent" />
-        <div className="absolute left-0 top-1/4 w-72 h-72 bg-meetease-purple/20 rounded-full filter blur-3xl opacity-20" />
-        <div className="absolute right-0 bottom-1/4 w-96 h-96 bg-meetease-blue/20 rounded-full filter blur-3xl opacity-20" />
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-cyan-500/5 to-transparent" />
+        <div className="absolute left-0 top-1/4 w-72 h-72 bg-cyan-500/20 rounded-full filter blur-3xl opacity-20" />
+        <div className="absolute right-0 bottom-1/4 w-96 h-96 bg-blue-500/20 rounded-full filter blur-3xl opacity-20" />
       </div>
       
       <div className="container mx-auto px-6">

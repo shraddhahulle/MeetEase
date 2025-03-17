@@ -53,7 +53,7 @@ const CalendarViewControls: React.FC<CalendarViewControlsProps> = ({
 
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-      <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+      <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
         Meeting Schedule
       </h2>
       <div className="flex flex-wrap gap-2">
@@ -61,8 +61,8 @@ const CalendarViewControls: React.FC<CalendarViewControlsProps> = ({
           variant={viewMode === 'calendar' ? 'default' : 'outline'} 
           size="sm"
           className={viewMode === 'calendar' 
-            ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white' 
-            : 'border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-600 dark:text-purple-300 dark:hover:bg-purple-900/30'}
+            ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' 
+            : 'border-cyan-200 text-cyan-700 hover:bg-cyan-50 dark:border-cyan-600 dark:text-cyan-300 dark:hover:bg-cyan-900/30'}
           onClick={() => setViewMode('calendar')}
         >
           <CalendarIcon size={16} className="mr-2" />
@@ -72,8 +72,8 @@ const CalendarViewControls: React.FC<CalendarViewControlsProps> = ({
           variant={viewMode === 'list' ? 'default' : 'outline'} 
           size="sm"
           className={viewMode === 'list' 
-            ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white' 
-            : 'border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-600 dark:text-purple-300 dark:hover:bg-purple-900/30'}
+            ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' 
+            : 'border-cyan-200 text-cyan-700 hover:bg-cyan-50 dark:border-cyan-600 dark:text-cyan-300 dark:hover:bg-cyan-900/30'}
           onClick={() => setViewMode('list')}
         >
           <List size={16} className="mr-2" />
@@ -83,7 +83,7 @@ const CalendarViewControls: React.FC<CalendarViewControlsProps> = ({
           variant="outline"
           size="sm"
           title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-          className="border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-600 dark:text-purple-300 dark:hover:bg-purple-900/30"
+          className="border-cyan-200 text-cyan-700 hover:bg-cyan-50 dark:border-cyan-600 dark:text-cyan-300 dark:hover:bg-cyan-900/30"
           onClick={toggleTheme}
         >
           {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
@@ -93,17 +93,17 @@ const CalendarViewControls: React.FC<CalendarViewControlsProps> = ({
             <Button 
               variant="outline" 
               size="sm" 
-              className="border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-600 dark:text-purple-300 dark:hover:bg-purple-900/30"
+              className="border-cyan-200 text-cyan-700 hover:bg-cyan-50 dark:border-cyan-600 dark:text-cyan-300 dark:hover:bg-cyan-900/30"
             >
               <FileText size={16} className="mr-2" />
               Export
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-56 p-0 shadow-lg border-purple-100 dark:border-purple-800">
+          <PopoverContent className="w-56 p-0 shadow-lg border-cyan-100 dark:border-cyan-800">
             <div className="p-1">
               <Button 
                 variant="ghost" 
-                className="w-full justify-start text-purple-700 hover:bg-purple-50 hover:text-purple-800 dark:text-purple-300 dark:hover:bg-purple-900/30 dark:hover:text-purple-200"
+                className="w-full justify-start text-cyan-700 hover:bg-cyan-50 hover:text-cyan-800 dark:text-cyan-300 dark:hover:bg-cyan-900/30 dark:hover:text-cyan-200"
                 onClick={handleExportAll}
               >
                 <FileText size={16} className="mr-2" />
@@ -111,7 +111,7 @@ const CalendarViewControls: React.FC<CalendarViewControlsProps> = ({
               </Button>
               <Button 
                 variant="ghost" 
-                className="w-full justify-start text-purple-700 hover:bg-purple-50 hover:text-purple-800 dark:text-purple-300 dark:hover:bg-purple-900/30 dark:hover:text-purple-200"
+                className="w-full justify-start text-cyan-700 hover:bg-cyan-50 hover:text-cyan-800 dark:text-cyan-300 dark:hover:bg-cyan-900/30 dark:hover:text-cyan-200"
                 onClick={syncWithGoogleCalendar}
               >
                 <Share2 size={16} className="mr-2" />
@@ -119,7 +119,7 @@ const CalendarViewControls: React.FC<CalendarViewControlsProps> = ({
               </Button>
               <Button 
                 variant="ghost" 
-                className="w-full justify-start text-purple-700 hover:bg-purple-50 hover:text-purple-800 dark:text-purple-300 dark:hover:bg-purple-900/30 dark:hover:text-purple-200"
+                className="w-full justify-start text-cyan-700 hover:bg-cyan-50 hover:text-cyan-800 dark:text-cyan-300 dark:hover:bg-cyan-900/30 dark:hover:text-cyan-200"
                 onClick={syncWithOutlookCalendar}
               >
                 <Share2 size={16} className="mr-2" />

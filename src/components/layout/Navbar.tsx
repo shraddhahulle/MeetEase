@@ -31,7 +31,7 @@ const Navbar = () => {
   const handleSignIn = () => {
     toast({
       title: "Sign In",
-      description: "Sign in functionality will be available soon!",
+      description: "Signing in to your account...",
     });
     navigate('/dashboard');
   };
@@ -44,6 +44,14 @@ const Navbar = () => {
     setTimeout(() => {
       navigate('/dashboard');
     }, 1500);
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    setIsMobileMenuOpen(false);
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -65,6 +73,11 @@ const Navbar = () => {
                 key={item.name}
                 href={item.href}
                 className="text-foreground/80 hover:text-foreground transition-colors duration-200 font-medium"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const sectionId = item.href.replace('#', '');
+                  scrollToSection(sectionId);
+                }}
               >
                 {item.name}
               </a>
@@ -74,7 +87,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-4">
             <button 
               onClick={handleSignIn}
-              className="font-medium text-meetease-blue hover:text-meetease-blue/80 transition-colors"
+              className="font-medium text-cyan-600 hover:text-cyan-700 transition-colors"
             >
               Sign In
             </button>
@@ -104,7 +117,11 @@ const Navbar = () => {
                   key={item.name}
                   href={item.href}
                   className="text-foreground/80 hover:text-foreground py-2 transition-colors duration-200"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const sectionId = item.href.replace('#', '');
+                    scrollToSection(sectionId);
+                  }}
                 >
                   {item.name}
                 </a>
@@ -115,7 +132,7 @@ const Navbar = () => {
                     handleSignIn();
                     setIsMobileMenuOpen(false);
                   }}
-                  className="block py-2 font-medium text-meetease-blue"
+                  className="block py-2 font-medium text-cyan-600"
                 >
                   Sign In
                 </button>

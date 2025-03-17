@@ -5,8 +5,12 @@ import Hero from '@/components/layout/Hero';
 import Features from '@/components/layout/Features';
 import GradientButton from '@/components/ui/GradientButton';
 import { CheckCircle, ArrowRight, CalendarClock, Users, BrainCircuit, Globe } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from '@/hooks/use-toast';
 
 const Index = () => {
+  const navigate = useNavigate();
+  
   const stats = [
     { value: '150,000+', label: 'Active Users' },
     { value: '15M+', label: 'Meetings Scheduled' },
@@ -48,6 +52,13 @@ const Index = () => {
       ],
       cta: "Get Started",
       popular: false,
+      action: () => {
+        toast({
+          title: "Free Plan Selected",
+          description: "Setting up your free account...",
+        });
+        setTimeout(() => navigate('/dashboard'), 1500);
+      }
     },
     {
       name: "Pro",
@@ -63,6 +74,13 @@ const Index = () => {
       ],
       cta: "Start 14-Day Trial",
       popular: true,
+      action: () => {
+        toast({
+          title: "Pro Plan Selected",
+          description: "Starting your 14-day free trial...",
+        });
+        setTimeout(() => navigate('/dashboard'), 1500);
+      }
     },
     {
       name: "Team",
@@ -78,6 +96,18 @@ const Index = () => {
       ],
       cta: "Contact Sales",
       popular: false,
+      action: () => {
+        toast({
+          title: "Team Plan Inquiry",
+          description: "Connecting you with our sales team...",
+        });
+        setTimeout(() => {
+          toast({
+            title: "Request Received",
+            description: "Our sales team will contact you shortly.",
+          });
+        }, 2000);
+      }
     },
   ];
 
@@ -112,7 +142,7 @@ const Index = () => {
         <Hero />
         
         {/* Stats Section */}
-        <section className="py-16 bg-meetease-blue/5">
+        <section className="py-16 bg-cyan-500/5">
           <div className="container mx-auto px-6">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {stats.map((stat, index) => (
@@ -133,7 +163,7 @@ const Index = () => {
         <section id="how-it-works" className="py-20 bg-white">
           <div className="container mx-auto px-6">
             <div className="text-center mb-16">
-              <span className="inline-flex items-center px-3 py-1 rounded-full bg-meetease-purple/10 text-meetease-purple text-sm font-medium mb-6">
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-600 text-sm font-medium mb-6">
                 How It Works
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Simple, smart, and efficient</h2>
@@ -168,12 +198,12 @@ const Index = () => {
               ].map((step, index) => (
                 <div key={index} className="flex flex-col items-center text-center">
                   <div className="relative mb-6">
-                    <div className="absolute inset-0 bg-meetease-blue/10 rounded-full transform -translate-x-1 -translate-y-1"></div>
-                    <div className="relative w-16 h-16 rounded-full bg-white border border-meetease-blue/20 flex items-center justify-center">
-                      <step.icon className="w-8 h-8 text-meetease-blue" />
+                    <div className="absolute inset-0 bg-cyan-500/10 rounded-full transform -translate-x-1 -translate-y-1"></div>
+                    <div className="relative w-16 h-16 rounded-full bg-white border border-cyan-500/20 flex items-center justify-center">
+                      <step.icon className="w-8 h-8 text-cyan-500" />
                     </div>
                     {index < 3 && (
-                      <div className="absolute top-1/2 left-full w-full h-px bg-meetease-blue/20 hidden lg:block"></div>
+                      <div className="absolute top-1/2 left-full w-full h-px bg-cyan-500/20 hidden lg:block"></div>
                     )}
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
@@ -185,10 +215,10 @@ const Index = () => {
         </section>
         
         {/* Testimonials */}
-        <section className="py-20 bg-meetease-blue/5">
+        <section className="py-20 bg-cyan-500/5">
           <div className="container mx-auto px-6">
             <div className="text-center mb-16">
-              <span className="inline-flex items-center px-3 py-1 rounded-full bg-meetease-teal/10 text-meetease-teal text-sm font-medium mb-6">
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-teal-500/10 text-teal-600 text-sm font-medium mb-6">
                 Testimonials
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Loved by teams everywhere</h2>
@@ -203,7 +233,7 @@ const Index = () => {
                   key={index} 
                   className="premium-card p-6 relative overflow-hidden hover-scale"
                 >
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-meetease-blue/5 rounded-full transform translate-x-8 -translate-y-8"></div>
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full transform translate-x-8 -translate-y-8"></div>
                   <blockquote className="text-foreground mb-6 relative z-10">
                     "{testimonial.content}"
                   </blockquote>
@@ -228,7 +258,7 @@ const Index = () => {
         <section id="pricing" className="py-20 bg-white">
           <div className="container mx-auto px-6">
             <div className="text-center mb-16">
-              <span className="inline-flex items-center px-3 py-1 rounded-full bg-meetease-orange/10 text-meetease-orange text-sm font-medium mb-6">
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-orange-500/10 text-orange-600 text-sm font-medium mb-6">
                 Pricing
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Simple, transparent pricing</h2>
@@ -242,11 +272,11 @@ const Index = () => {
                 <div 
                   key={index} 
                   className={`premium-card p-8 relative hover-scale ${
-                    plan.popular ? 'border-meetease-blue shadow-[0_0_0_2px_rgba(10,132,255,0.1)]' : ''
+                    plan.popular ? 'border-cyan-500 shadow-[0_0_0_2px_rgba(6,182,212,0.1)]' : ''
                   }`}
                 >
                   {plan.popular && (
-                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-meetease-blue text-white px-4 py-1 rounded-full text-sm font-medium">
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-cyan-500 text-white px-4 py-1 rounded-full text-sm font-medium">
                       Popular
                     </div>
                   )}
@@ -263,7 +293,7 @@ const Index = () => {
                   <ul className="mt-6 space-y-3">
                     {plan.features.map((feature, i) => (
                       <li key={i} className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-meetease-green mr-2 shrink-0" />
+                        <CheckCircle className="w-5 h-5 text-green-500 mr-2 shrink-0" />
                         <span>{feature}</span>
                       </li>
                     ))}
@@ -272,6 +302,7 @@ const Index = () => {
                     <GradientButton 
                       className="w-full"
                       variant={plan.popular ? 'primary' : 'outline'}
+                      onClick={plan.action}
                     >
                       {plan.cta}
                     </GradientButton>
@@ -283,10 +314,10 @@ const Index = () => {
         </section>
         
         {/* FAQ */}
-        <section id="faq" className="py-20 bg-meetease-blue/5">
+        <section id="faq" className="py-20 bg-cyan-500/5">
           <div className="container mx-auto px-6">
             <div className="text-center mb-16">
-              <span className="inline-flex items-center px-3 py-1 rounded-full bg-meetease-indigo/10 text-meetease-indigo text-sm font-medium mb-6">
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-600 text-sm font-medium mb-6">
                 FAQ
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Frequently asked questions</h2>
@@ -338,8 +369,8 @@ const Index = () => {
         <section className="py-20 bg-white">
           <div className="container mx-auto px-6">
             <div className="max-w-4xl mx-auto text-center premium-card p-12 relative overflow-hidden">
-              <div className="absolute -top-20 -right-20 w-64 h-64 bg-meetease-blue/10 rounded-full" />
-              <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-meetease-purple/10 rounded-full" />
+              <div className="absolute -top-20 -right-20 w-64 h-64 bg-cyan-500/10 rounded-full" />
+              <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-500/10 rounded-full" />
               
               <div className="relative z-10">
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">
@@ -349,11 +380,30 @@ const Index = () => {
                   Join thousands of teams and individuals who have already discovered the power of AI-driven scheduling with MeetEase.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <GradientButton size="lg" className="group">
+                  <GradientButton 
+                    size="lg" 
+                    className="group"
+                    onClick={() => {
+                      toast({
+                        title: "Getting Started",
+                        description: "Setting up your free account...",
+                      });
+                      setTimeout(() => navigate('/dashboard'), 1500);
+                    }}
+                  >
                     Get Started Free
                     <ArrowRight className="ml-2 w-4 h-4 inline-block transition-transform group-hover:translate-x-1" />
                   </GradientButton>
-                  <GradientButton size="lg" variant="outline">
+                  <GradientButton 
+                    size="lg" 
+                    variant="outline"
+                    onClick={() => {
+                      toast({
+                        title: "Demo Scheduled",
+                        description: "A member of our team will contact you shortly to schedule a personalized demo.",
+                      });
+                    }}
+                  >
                     Book a Demo
                   </GradientButton>
                 </div>
@@ -383,7 +433,17 @@ const Index = () => {
               <ul className="space-y-2">
                 {['Features', 'Integrations', 'Pricing', 'Demo', 'Security'].map((item) => (
                   <li key={item}>
-                    <a href="#" className="text-white/60 hover:text-white transition-colors">
+                    <a 
+                      href="#" 
+                      className="text-white/60 hover:text-white transition-colors"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toast({
+                          title: item,
+                          description: `Navigating to ${item.toLowerCase()} page...`,
+                        });
+                      }}
+                    >
                       {item}
                     </a>
                   </li>
@@ -396,7 +456,17 @@ const Index = () => {
               <ul className="space-y-2">
                 {['Blog', 'Guides', 'Support', 'API', 'Status'].map((item) => (
                   <li key={item}>
-                    <a href="#" className="text-white/60 hover:text-white transition-colors">
+                    <a 
+                      href="#" 
+                      className="text-white/60 hover:text-white transition-colors"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toast({
+                          title: item,
+                          description: `Navigating to ${item.toLowerCase()} page...`,
+                        });
+                      }}
+                    >
                       {item}
                     </a>
                   </li>
@@ -409,7 +479,17 @@ const Index = () => {
               <ul className="space-y-2">
                 {['About', 'Careers', 'Press', 'Contact', 'Partners'].map((item) => (
                   <li key={item}>
-                    <a href="#" className="text-white/60 hover:text-white transition-colors">
+                    <a 
+                      href="#" 
+                      className="text-white/60 hover:text-white transition-colors"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toast({
+                          title: item,
+                          description: `Navigating to ${item.toLowerCase()} page...`,
+                        });
+                      }}
+                    >
                       {item}
                     </a>
                   </li>
@@ -422,7 +502,17 @@ const Index = () => {
               <ul className="space-y-2">
                 {['Terms', 'Privacy', 'Cookies', 'Licenses', 'Settings'].map((item) => (
                   <li key={item}>
-                    <a href="#" className="text-white/60 hover:text-white transition-colors">
+                    <a 
+                      href="#" 
+                      className="text-white/60 hover:text-white transition-colors"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toast({
+                          title: "Legal Information",
+                          description: `Viewing ${item.toLowerCase()} information...`,
+                        });
+                      }}
+                    >
                       {item}
                     </a>
                   </li>
@@ -441,6 +531,13 @@ const Index = () => {
                   key={social} 
                   href="#" 
                   className="text-white/60 hover:text-white transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toast({
+                      title: social,
+                      description: `Opening ${social} in a new tab...`,
+                    });
+                  }}
                 >
                   {social}
                 </a>

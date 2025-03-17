@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 interface GradientButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline';
@@ -8,6 +9,7 @@ interface GradientButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
   children: React.ReactNode;
   className?: string;
   isLoading?: boolean;
+  to?: string;
 }
 
 const GradientButton = ({
@@ -17,12 +19,15 @@ const GradientButton = ({
   className,
   isLoading = false,
   disabled,
+  to,
   ...props
 }: GradientButtonProps) => {
+  const navigate = useNavigate();
+  
   const variants = {
-    primary: 'bg-gradient-to-r from-meetease-blue to-meetease-indigo text-white',
-    secondary: 'bg-gradient-to-r from-meetease-purple to-meetease-pink text-white',
-    outline: 'bg-white border border-meetease-blue text-meetease-blue hover:bg-meetease-blue/5',
+    primary: 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white',
+    secondary: 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white',
+    outline: 'bg-white border border-cyan-500 text-cyan-600 hover:bg-cyan-50',
   };
 
   const sizes = {
@@ -32,18 +37,30 @@ const GradientButton = ({
   };
 
   const isDisabled = disabled || isLoading;
+  
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (to && !isDisabled) {
+      e.preventDefault();
+      navigate(to);
+    }
+    
+    if (props.onClick && !isDisabled) {
+      props.onClick(e);
+    }
+  };
 
   return (
     <button
       className={cn(
         'rounded-full font-medium transition-all duration-300 relative overflow-hidden',
-        'hover:shadow-[0_6px_20px_rgba(10,132,255,0.25)] active:translate-y-[1px]',
+        'hover:shadow-[0_6px_20px_rgba(6,182,212,0.25)] active:translate-y-[1px]',
         variants[variant],
         sizes[size],
         isDisabled && 'opacity-60 cursor-not-allowed',
         className
       )}
       disabled={isDisabled}
+      onClick={handleClick}
       {...props}
     >
       <span className="relative z-10 flex items-center justify-center">
@@ -55,7 +72,7 @@ const GradientButton = ({
         )}
         {children}
       </span>
-      <span className="absolute inset-0 opacity-0 hover:opacity-100 bg-gradient-to-r from-meetease-blue/90 to-meetease-indigo/90 transition-opacity duration-300" />
+      <span className="absolute inset-0 opacity-0 hover:opacity-100 bg-gradient-to-r from-cyan-500/90 to-blue-500/90 transition-opacity duration-300" />
     </button>
   );
 };

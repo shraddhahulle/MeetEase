@@ -64,6 +64,12 @@ export const MeetingControls: React.FC<MeetingControlsProps> = ({
         <Button 
           variant="ghost" 
           className="bg-white/20 text-white hover:bg-white/40"
+          onClick={() => {
+            toast({
+              title: "Participants",
+              description: "Viewing meeting participants...",
+            });
+          }}
         >
           <Users className="h-5 w-5" />
         </Button>
@@ -72,7 +78,7 @@ export const MeetingControls: React.FC<MeetingControlsProps> = ({
           className={isRecording ? "" : "bg-white/20 text-white hover:bg-white/40"}
           onClick={handleRecord}
         >
-          {isRecording ? "Stop Recording" : "Record Meeting"}
+          {isRecording ? `Stop Recording (${formatTime(recordingTime)})` : "Record Meeting"}
         </Button>
         <Button 
           variant="ghost" 
