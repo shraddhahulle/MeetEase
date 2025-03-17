@@ -4,7 +4,7 @@ import { useCalendarState } from '@/hooks/useCalendarState';
 import MeetingListView from './MeetingListView';
 import CalendarView from './CalendarView';
 import CalendarViewControls from './CalendarViewControls';
-import { handleExportAllToPDF } from './meetingUtils';
+import { handleExportAllToPDF, handleExportMeetingToPDF } from './meetingUtils';
 
 export const MeetingCalendar: React.FC = () => {
   const {
