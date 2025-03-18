@@ -4,6 +4,8 @@
 
 MeetEase is an AI-powered smart meeting scheduler designed to streamline your scheduling process, integrate with popular calendar platforms, and provide intelligent meeting insights.
 
+## Link for Live Project - https://meetease-scheduling-genius.vercel.app/
+
 🛠️ Technologies Used
 
 This project is built with the following technologies:
